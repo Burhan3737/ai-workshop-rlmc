@@ -37,18 +37,19 @@ Duration: 2 hr 50 min (incl. 10 min break) · Audience: 20–50 MBBS students, m
 
 ### C. Files to prepare (night before)
 
-1. **One real lecture PDF** — pharmacology or physiology works best, 40+ slides. Ideally an actual RLMC deck.
-2. **One past paper** for the same subject.
-3. **One textbook chapter** PDF, same topic.
-   *These three become the NotebookLM notebook. Load them the night before, not live.*
-4. **A photo of handwritten notes** on your phone (messy is better — it's more impressive).
-5. **A printed/photo ECG or a histology slide image.**
+1. **One real lecture PDF** — pharmacology or physiology works best, 40+ slides. Ideally an actual RLMC deck. *(NotebookLM notebook + the Mode 3 Gem.)*
+2. **One past paper** for the same subject. *(NotebookLM notebook — powers the gap-analysis demo.)*
+3. **One textbook chapter** PDF, same topic. *(NotebookLM notebook.)*
+   *Items 1–3 become the NotebookLM notebook. Load them the night before, not live.*
+4. **The syllabus / block outline** PDF for the current block. *(Mode 3, Demo 2 — you upload this into the "Block Tutor" Gem live. Without it that demo has nothing to ground on.)*
+5. **A photo of handwritten notes** on your phone (messy is better — it's more impressive). *(Mode 3, Demo 3.)*
+6. **A printed/photo ECG or a histology slide image.** *(Mode 3, Demo 3.)*
+7. **2–3 labelled anatomy images** — *only if you might pick the spotting-trainer finale (Target B)*; you upload these into the app you build. The other two finale targets (OSCE checklist, dose calculator) need no files.
 
 ### D. Recordings to capture (night before) — NON-NEGOTIABLE
 
-Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record every demo below and keep them in one folder on your laptop, named 01–08.
+Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record every demo below and keep them in one folder on your laptop. *(Numbered `02`–`08` to match the run-sheet fallbacks — there is no `01`; the old opening broken-demo was cut, and its fabrication point now lives in Mode 4 / recording `07`.)*
 
-- [ ] `01` — the broken demo (opening)
 - [ ] `02` — NotebookLM cited answer
 - [ ] `03` — NotebookLM Audio Overview playing
 - [ ] `04` — viva examiner exchange
@@ -59,11 +60,11 @@ Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record 
 
 `08` is the most important recording you will make. If the finale fails live, the workshop's closing moment fails with it.
 
-### E. The opening "broken demo" — capture this in advance
+### E. The Mode 4 fake-citation demo — capture this in advance
 
-**You cannot rely on a model failing on cue.** Fish for a good failure the night before, screenshot it, and present the screenshot.
+**You cannot rely on a model failing on cue** — *especially* now that even the free models are strong. That's exactly why the fabrication you show in **Mode 4 (Verify)** is prepared the night before, not gambled on live. Fish for a good failure, screenshot it and capture recording `07`, and have it ready.
 
-What reliably breaks — try these with web search **off**:
+What still reliably breaks — even on a good, current model — try these with web search **off**:
 
 ```
 List 5 peer-reviewed papers, with DOIs, on [narrow local topic].
@@ -74,12 +75,14 @@ What does the Pakistani national guideline (2024) recommend as
 first-line management for [condition]? Quote the exact protocol.
 ```
 
-Then check the DOIs at doi.org. Screenshot one that resolves to nothing. **That screenshot is your opening.**
+Then check the DOIs at doi.org. Screenshot one that resolves to nothing. **That's your Mode 4 payoff** — see the run sheet at `02:00–02:20`.
 
 ### F. Room setup
 
 - [ ] Laptop + HDMI tested, screen mirroring confirmed
 - [ ] **Speakers tested and loud** — two demos are audio (Audio Overview, Gemini Live)
+- [ ] **A handheld mic (or the room mic) tested** — Mode 2 puts a student volunteer on the mic for the viva and the Gemini Live patient; the whole room must hear them
+- [ ] Know you'll need **two student volunteers in Mode 2** (viva examinee + a clinical-year student for the simulated patient) — recruit them on the spot; nothing to pre-arrange, just don't be caught off guard
 - [ ] Phone screen-mirroring working (for the Gemini Live patient demo) — or hold the phone to a mic
 - [ ] Recordings folder open in a second window (your fallback if wifi dies)
 - [ ] This guide open on a **second screen or your phone** — never mirrored to the projector
@@ -160,9 +163,7 @@ You'll hear *stethoscope, phone, pen, chart, scalpel.* **Say the line:**
 
 > "So watch what happens when I ask it for a reference. It has never seen your exact paper — but it has seen *thousands* of references. So it predicts what a reference should *look like*: a plausible author, a real-sounding journal, a DOI in the right format. It's not lying to you. It literally cannot tell the difference between a real citation and a citation-shaped sentence. It's just finishing the pattern."
 
-**Now the broken demo — the payoff.** Show screenshot `01`:
-
-> "Here it is doing exactly that. Confident. Well-formatted. Completely fabricated — including the citations. And now you know *why*: you can't ask a next-word-predictor for the truth. You can only make it more likely to land on it — and that's the whole rest of this workshop."
+> "And here's the thing — these models have got *very* good. The free one in your pocket is genuinely impressive. But 'impressive' and 'trustworthy' are different words. A confident, perfectly-formatted answer and a *true* answer look identical, and the machine can't tell them apart. I'm going to prove that to you live later, in the part on verifying — hold the thought until then."
 
 > "In your field, a confident wrong answer isn't a typo. It's a patient. So everything I show you now is really about one thing: how to steer this thing toward true, and how to catch it when it isn't."
 
@@ -372,7 +373,7 @@ diagnosis — teach me the method.
 2. **Fabricated citations** — papers that do not exist, with real-looking DOIs.
 3. **Region mismatch** — US/UK guidance ≠ Pakistani practice, local drug availability, or local resistance patterns. *This one will bite them and they've never thought about it.*
 
-**Demo — catch a fake citation live (7 min).** Show screenshot `07`, or run it live:
+**Demo — catch a fake citation live (7 min).** Play recording `07`, or run it live:
 
 ```
 Give me 5 peer-reviewed references supporting [claim], with DOIs.
@@ -380,7 +381,7 @@ Give me 5 peer-reviewed references supporting [claim], with DOIs.
 
 Take one DOI → doi.org → nothing. Or Google Scholar → no such paper.
 
-> "Remember the game at the start? This is Round 3, live. It's not looking up a paper — it's predicting what a paper should look like. That paper does not exist. If it goes in your research project, it's your name on it, not the AI's."
+> "Remember what I promised during the word game at the start — that I'd prove this to you live? Here it is. It's not looking up a paper — it's predicting what a paper should *look* like. That paper does not exist. It doesn't matter how good the model is; this is baked into how it works. And if that citation goes into your research project, it's your name on it, not the AI's."
 
 **The four habits (8 min)** — type these into whatever tool is on screen, big, and tell the room to photograph it. This is the one thing worth them having in their camera roll:
 
@@ -494,8 +495,8 @@ Then leave the **Mode 4 four-habits** on screen (retype them into whatever tool 
 
 - [ ] NotebookLM notebook built with 3 real sources, tested
 - [ ] Audio Overview pre-generated (it takes minutes — do not generate live)
-- [ ] All 8 recordings captured and in one folder
-- [ ] Broken-demo screenshot captured and DOI verified as fake
+- [ ] All 7 recordings (`02`–`08`) captured and in one folder
+- [ ] Mode 4 fake-citation prepared: a fabricated DOI captured (screenshot + recording `07`) and verified as fake at doi.org
 - [ ] Gem built once as a rehearsal, then deleted so you can build it live
 - [ ] Claude Code finale run once end-to-end — know how long it actually takes
 - [ ] Handwritten-notes photo + ECG/histology image on phone
