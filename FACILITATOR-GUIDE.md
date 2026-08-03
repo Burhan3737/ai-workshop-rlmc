@@ -8,6 +8,8 @@ Duration: 2 hr 50 min (incl. 10 min break) · Audience: 20–50 MBBS students, m
 
 > **How to run this workshop:** there is no slide deck. **Your screen is the show.** You live-drive the actual tools — NotebookLM, Gemini, Claude, Claude Code — and the students watch you do real things, not slides about them. This document is your private script: keep it open on a second screen, your phone, or a printout. Nothing in here is meant to be projected. Part 2 is a minute-by-minute run sheet; the **bold quoted lines are what you say out loud**, the `code blocks` are what you paste into the tool on screen.
 
+> **You are not the medical expert — and the demos don't ask you to be.** The demos *you drive* use plain, everyday general-knowledge topics anyone in the room can follow and fact-check — this guide uses **the water cycle, the solar system, photosynthesis, compound interest, and the history of the ballpoint pen**. Use them as written, or swap in anything you know cold; you're teaching the *technique*, not the subject. (The document-based demos — Mode 1 and the Gem — stay on **the water cycle** throughout, because they build on the same uploaded notes.) Every *hands-on block* then flips it: students load their **own real course material** — that's where the medical content belongs, supplied by the people who can actually judge it. The medical *framing* stays (it's why this matters to them); only the demo *content* is generic.
+
 ---
 
 ## PART 1 — PREP
@@ -37,14 +39,16 @@ Duration: 2 hr 50 min (incl. 10 min break) · Audience: 20–50 MBBS students, m
 
 ### C. Files to prepare (night before)
 
-1. **One real lecture PDF** — pharmacology or physiology works best, 40+ slides. Ideally an actual RLMC deck. *(NotebookLM notebook + the Mode 3 Gem.)*
-2. **One past paper** for the same subject. *(NotebookLM notebook — powers the gap-analysis demo.)*
-3. **One textbook chapter** PDF, same topic. *(NotebookLM notebook.)*
+*This is the **facilitator's demo set** — all on one neutral topic you know well (this guide uses **the water cycle**). Students bring their own real course material for the hands-on parts; you don't need any.*
+
+1. **A short explainer/notes PDF** on your example topic — e.g. the Wikipedia article on the water cycle exported to PDF, or any 5–15 page explainer. *(NotebookLM notebook + the Mode 3 Gem — this is your "lecture notes".)*
+2. **A one-page set of practice questions** on the same topic. Don't have one? Generate it with AI the night before and save as PDF. *(NotebookLM notebook — this is your "past paper"; it powers the gap-analysis demo.)*
+3. **A second source** on the same topic (another article/chapter PDF). *(NotebookLM notebook — adds depth.)*
    *Items 1–3 become the NotebookLM notebook. Load them the night before, not live.*
-4. **The syllabus / block outline** PDF for the current block. *(Mode 3, Demo 2 — you upload this into the "Block Tutor" Gem live. Without it that demo has nothing to ground on.)*
-5. **A photo of handwritten notes** on your phone (messy is better — it's more impressive). *(Mode 3, Demo 3.)*
-6. **A printed/photo ECG or a histology slide image.** *(Mode 3, Demo 3.)*
-7. **2–3 labelled anatomy images** — *only if you might pick the spotting-trainer finale (Target B)*; you upload these into the app you build. The other two finale targets (OSCE checklist, dose calculator) need no files.
+4. **A simple one-page outline** of the topic's subtopics. *(Mode 3, Demo 2 — you upload this into the "Topic Tutor" Gem live; it stands in for a syllabus.)*
+5. **A photo of some handwritten notes** on your phone (messy is better — it's more impressive). Any subject. *(Mode 3, Demo 3.)*
+6. **A photo of any diagram, chart, or figure** you can talk about — a graph, a labelled diagram, an infographic. *(Mode 3, Demo 3 — you'll ask the AI to "read" it.)*
+7. **2–3 labelled images** — *only if you might pick the image-quiz finale (Target B)*; any images with labels (flags, landmarks, logos — anything). You upload these into the app you build. The other two finale targets need no files.
 
 ### D. Recordings to capture (night before) — NON-NEGOTIABLE
 
@@ -53,7 +57,7 @@ Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record 
 - [ ] `02` — NotebookLM cited answer
 - [ ] `03` — NotebookLM Audio Overview playing
 - [ ] `04` — viva examiner exchange
-- [ ] `05` — Gemini Live simulated patient
+- [ ] `05` — Gemini Live role-play + debrief
 - [ ] `06` — Gem being built + used
 - [ ] `07` — fake citation being caught
 - [ ] `08` — **Claude Code building the app, start to finish**
@@ -67,12 +71,12 @@ Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record 
 What still reliably breaks — even on a good, current model — try these with web search **off**:
 
 ```
-List 5 peer-reviewed papers, with DOIs, on [narrow local topic].
+List 5 peer-reviewed papers, with DOIs, on the cultural history of coffee.
 ```
 
 ```
-What does the Pakistani national guideline (2024) recommend as
-first-line management for [condition]? Quote the exact protocol.
+Quote the exact wording of clause 4.2 of the ISO 9001 standard,
+word for word.
 ```
 
 Then check the DOIs at doi.org. Screenshot one that resolves to nothing. **That's your Mode 4 payoff** — see the run sheet at `02:00–02:20`.
@@ -81,9 +85,9 @@ Then check the DOIs at doi.org. Screenshot one that resolves to nothing. **That'
 
 - [ ] Laptop + HDMI tested, screen mirroring confirmed
 - [ ] **Speakers tested and loud** — two demos are audio (Audio Overview, Gemini Live)
-- [ ] **A handheld mic (or the room mic) tested** — Mode 2 puts a student volunteer on the mic for the viva and the Gemini Live patient; the whole room must hear them
-- [ ] Know you'll need **two student volunteers in Mode 2** (viva examinee + a clinical-year student for the simulated patient) — recruit them on the spot; nothing to pre-arrange, just don't be caught off guard
-- [ ] Phone screen-mirroring working (for the Gemini Live patient demo) — or hold the phone to a mic
+- [ ] **A handheld mic (or the room mic) tested** — Mode 2 puts a student volunteer on the mic for the viva and the Gemini Live role-play; the whole room must hear them
+- [ ] Know you'll need **two student volunteers in Mode 2** (the viva examinee + someone for the live role-play/interview) — recruit them on the spot; nothing to pre-arrange, just don't be caught off guard
+- [ ] Phone screen-mirroring working (for the Gemini Live role-play demo) — or hold the phone to a mic
 - [ ] Recordings folder open in a second window (your fallback if wifi dies)
 - [ ] This guide open on a **second screen or your phone** — never mirrored to the projector
 - [ ] Browser zoom bumped to ~125% so the back row can read what you type
@@ -137,22 +141,24 @@ Then check the DOIs at doi.org. Screenshot one that resolves to nothing. **That'
 
 **Round 1 — the obvious one (2 min).** Say the stem, cut yourself off, and let the room shout the next word:
 
-> "The patient presented with chest…"
+> "Twinkle, twinkle, little…"
 
-The room shouts **"PAIN."** Do two or three more:
+The room shouts **"STAR."** Do two or three more:
 
-> "History of presenting…" → *complaint*
-> "Blood… " → *pressure*
-> "Wash your…" → *hands*
+> "Better late than…" → *never*
+> "Salt and…" → *pepper*
+> "Once upon a…" → *time*
+
+*(A medical room warms up even faster to medical stems — "the patient presented with chest…" → PAIN. Use those instead if you're comfortable; the point is identical.)*
 
 **Say the line:**
 > "Notice you all said the same word. Nobody looked anything up. You just knew what usually comes next. Hold onto that — you just did exactly what the AI does."
 
 **Round 2 — the fork (3 min).** Now a stem with more than one good answer:
 
-> "The doctor picked up the…"
+> "I walked into the kitchen and picked up the…"
 
-You'll hear *stethoscope, phone, pen, chart, scalpel.* **Say the line:**
+You'll hear *kettle, cup, knife, phone, spoon.* **Say the line:**
 > "See what happened? It's not one answer — it's a spread of likely ones, each with a probability. The AI keeps a list exactly like that, then picks one. Change which one it picks and you get a slightly different sentence every time. That's why it never answers the same way twice."
 
 **Round 3 — the reveal (4 min).** Call back to their "What is AI?" answers from the top, then land what they just proved:
@@ -171,8 +177,52 @@ You'll hear *stethoscope, phone, pen, chart, scalpel.* **Say the line:**
 
 `GROUND IT → FLIP IT → AUTOMATE IT → VERIFY IT → BUILD IT`
 
+> *But first — the one skill sitting under all of them.*
+
+---
+// Moreover prompting is the foundation of every agent/llm we talk with, its what forms the basis of hwo we communcicate wiht an llm model and that the only skill we need tod evleop right mow (basically note for me here I might give a small speech or create this a discussion point) 
+### FOUNDATION — bad prompt vs good prompt (≈8 min, just before Mode 1)
+
+> **This is not a fifth mode — it's what makes the other four work.** Every mode below is just a *good* prompt pointed at a job. So before the tools, one skill: how to actually talk to it.
+
+*This adds ~8 min. The timestamps below don't include it — either shift them all back ~8 min, or buy the time back from a later hands-on (see Contingencies). Don't cut this.*
+
+**Show the difference live, same topic, side by side.**
+
+**The bad prompt** — type it, let the vague answer land:
+
+```
+tell me about the water cycle
+```
+
+> "Technically correct. Totally useless — a wall of text, because I gave it nothing to aim at."
+
+**The good prompt** — same topic, four things added:
+
+```
+You are a tutor for a student revising for an exam (ROLE).
+I keep mixing up the stages of the water cycle (CONTEXT).
+Explain it in 5 simple steps, then give me 3 quick questions to test
+myself (TASK). Keep it under 200 words, no jargon (FORMAT).
+```
+
+> "Same model, same topic. The only thing that changed is I told it *who to be, what I need, what to do, and what shape to hand back*. That's the whole skill."
+
+**The takeaway — put it on screen and tell them to photograph it:**
+
+```
+A good prompt has four parts:
+ROLE    — who it should be       ("you are a tutor…")
+CONTEXT — your situation         ("I'm revising and I keep mixing up…")
+TASK    — what to actually do    ("explain, then quiz me")
+FORMAT  — the shape to hand back ("5 steps, under 200 words, no jargon")
+```
+
+> "You'll see all four in every prompt I use for the rest of today. Watch for them."
+
 ---
 
+//before starting this section i need to present them a summary of what we would be discussing today (i.e a plan for today)
 ### `00:20–00:50` — MODE 1: GROUND IT
 
 > **Stop asking what it remembers. Make it read what you gave it.**
@@ -183,7 +233,8 @@ You'll hear *stethoscope, phone, pen, chart, scalpel.* **Say the line:**
 
 ```
 Using only my sources, give me a one-page high-yield summary of
-[topic] for a viva. Cite the slide or page number for every claim.
+the water cycle for revision. Cite the slide or page number for
+every claim.
 ```
 
 Click a citation. It jumps to the exact slide. **Say the line:**
@@ -192,7 +243,7 @@ Click a citation. It jumps to the exact slide. **Say the line:**
 **Demo 2 — the refusal (3 min).** Ask something deliberately outside the sources.
 
 ```
-What does my lecture say about [something not in the deck]?
+What do my notes say about the French Revolution?
 ```
 
 It says it isn't in your sources. **Say the line:**
@@ -201,21 +252,21 @@ It says it isn't in your sources. **Say the line:**
 **Demo 3 — the gap analysis (5 min).** This is the one they'll actually use tonight:
 
 ```
-Compare my lecture slides against the past paper. What has been
-asked in exams that my lectures do NOT cover? List it as a
-revision checklist.
+Compare my notes against the practice questions. What comes up in
+the questions that my notes do NOT cover? List it as a revision
+checklist.
 ```
 
 **Demo 4 — Audio Overview (7 min).** Generate it, then **play it out loud.** Customise first:
 
 ```
-Focus on [topic]. Explain at the level of an MBBS student
-preparing for a viva. Emphasise the points most likely to be asked.
+Focus on the water cycle. Explain it at the level of a student
+revising for an exam. Emphasise the points most likely to be tested.
 ```
 
-> "That's your commute. That's the queue at the canteen. Your pharmacology deck is now a podcast."
+> "That's your commute. That's the queue at the canteen. Your lecture deck is now a podcast."
 
-**HANDS-ON (10 min).** Everyone opens notebooklm.google.com, uploads one lecture PDF, asks one question, hits Generate Audio Overview.
+**HANDS-ON (10 min).** Everyone opens notebooklm.google.com and uploads **one of their own real lecture PDFs** — this is where the medical content comes in, theirs not yours — asks one question, hits Generate Audio Overview.
 *Walk the room. Expect: file too large, wrong Google account, unsupported format. Nobody is stuck for more than 2 min — pair them up.*
 
 **Fallback:** recordings `02`, `03`.
@@ -231,7 +282,8 @@ preparing for a viva. Emphasise the points most likely to be asked.
 Paste into Claude or Gemini:
 
 ```
-You are an FCPS Part 1 viva examiner. Examine me on [topic].
+You are a tough oral examiner for my course. Examine me on
+the solar system.
 
 Rules:
 - Ask ONE question at a time, then wait for my answer.
@@ -243,35 +295,35 @@ After 8 questions, stop and give me: my score out of 10, the two
 gaps that would have failed me, and exactly what to revise tonight.
 ```
 
-Let the volunteer squirm a little. It's more memorable than a smooth run.
+Ask the volunteer what they're studying and swap the topic in — let them squirm a little on their own subject. It's more memorable than a smooth run.
 
-**Demo 2 — the simulated patient (12 min). THE MOMENT OF THE WORKSHOP.**
+**Demo 2 — the live role-play partner (12 min). THE MOMENT OF THE WORKSHOP.**
 
 Open **Gemini Live on your phone** (mirrored/held to mic). Voice mode, speak this:
 
 ```
-You are a patient in an outpatient clinic. You have [hidden
-diagnosis]. Stay in character at all times — never break character,
-never explain anything medically.
+You are an interviewer for a university admission (or a job). Stay in
+character at all times — never break character.
 
-Answer only what I actually ask, the way a real, slightly anxious
-patient would: vague, sometimes off-topic. Do not volunteer key
-symptoms unless I ask a good question.
+Ask me realistic questions one at a time and wait for my answer. Be a
+little challenging, the way a real interviewer is. Don't coach me
+mid-answer.
 
-I am the medical student taking your history. Begin when I greet you.
-
-When I say "END", drop character and tell me: what I missed, what
-questions I should have asked, and how my communication came across.
+When I say "END", drop character and tell me: how I came across, my
+two weakest answers, and exactly what to improve.
 ```
 
-Bring a **clinical-year student** up to take the history out loud. Let it run 4–5 min. Then say **END** and read the debrief to the room.
+Bring a **volunteer** up to be interviewed out loud. Let it run 4–5 min. Then say **END** and read the debrief to the room.
 
-> "You can do that every night. For free. Unlimited patients, unlimited attempts, and it never gets tired of you."
+> "You can practise like that every night. For free. Unlimited attempts, and it never gets tired of you."
+
+**Then hand the medical version straight to the room:**
+> "Now — medics, your version of this is gold. Swap 'interviewer' for a patient with a hidden condition who only answers what you actually ask, and you've got an endless supply of history-taking and communication practice. Same technique, your subject. That's exactly what tonight's hands-on is about."
 
 **Demo 3 — the Feynman check (5 min).**
 
 ```
-I'm going to explain [topic] to you as if you're the examiner.
+I'm going to explain photosynthesis to you as if you're the examiner.
 Don't correct me while I talk. When I finish, tell me: which parts
 I actually understood, which parts I was reciting without
 understanding, and the one question an examiner would ask to
@@ -280,7 +332,7 @@ expose the gap.
 
 > "That last one is the difference between passing and being caught out."
 
-**HANDS-ON (5 min).** Pairs. One person runs a 3-min viva on their current block.
+**HANDS-ON (5 min).** Pairs. One person runs a 3-min viva on **a topic from their own course** — their material, their subject.
 
 **Fallback:** recordings `04`, `05`.
 
@@ -301,44 +353,46 @@ Leave the last Mode 2 result up on screen. Walk the room, answer questions, and 
 Claude → Settings → Profile · Gemini → Settings → Saved info · ChatGPT → Settings → Personalization
 
 ```
-I'm a [3rd] year MBBS student at Rashid Latif Medical College,
-Lahore, Pakistan, preparing for [university professionals / FCPS].
+I'm a university student preparing for exams.
 
-When I ask a clinical question:
-- Use terminology and drug names as used in Pakistan.
-- Flag when a guideline is US/UK-specific and may differ locally.
-- Structure answers viva-style: definition → causes → presentation
-  → investigation → management.
-- Tell me your confidence, and what I must verify in a textbook.
-- Never give me a dose without telling me where it came from.
+When you answer me:
+- Explain in clear, simple steps.
+- Structure answers as: definition → key points → example →
+  common mistakes.
+- Tell me how confident you are, and what I should double-check in a
+  trusted source.
+- If something is region- or context-specific, flag it.
 ```
 
 > "You write that once. It applies to every conversation you have from now on. Most people never open this screen."
 
+> *To the room:* "In the hands-on you'll write your own. A medic would add: 'use drug names as used in Pakistan, structure answers viva-style, never give a dose without a source.' That's your content — you know what belongs there, I don't."
+
 **Demo 2 — a saved assistant, built live (12 min).** Use **Gemini Gems** (free, unlimited, 10 files each) — gemini.google.com → *Gems* → *New Gem*.
 
-Name: `Block Tutor — [current block]`
+Name: `Topic Tutor — the water cycle`
 
 ```
-You are my tutor for the [X] block of MBBS at RLMC. My syllabus and
-lecture material are in your files.
+You are my tutor for the water cycle. My notes and outline are in
+your files.
 
 Always:
-- Answer only from my uploaded material where possible; say clearly
-  when you're going beyond it.
-- Answer in viva structure and use Pakistani clinical context.
-- End every answer with one follow-up question to test whether I
-  actually understood it.
+- Answer from my uploaded material where possible; say clearly when
+  you're going beyond it.
+- End every answer with one follow-up question to check I understood.
 
 If I say "QUIZ ME", stop teaching and examine me instead: one
 question at a time, no answers given, 8 questions, then score me.
 ```
 
-Upload the syllabus. Use it. **Then close it and reopen it** — show that it remembered everything.
+Upload your outline. Use it. **Then close it and reopen it** — show that it remembered everything.
 
-> "That's a tutor that knows your syllabus, your exam format and your country, and it's still there in March."
+> "That's a tutor that knows your material and your exam format, and it's still there in March. This — a saved, reusable assistant you set up once — is exactly what people mean when they talk about giving an AI a 'skill'."
 
-*Mention only:* Claude Projects does the same thing (free, 5 projects). Scheduled recurring quizzes exist but are **paid** — don't follow along.
+**This is your "skills" moment — and it's the free, hands-on one:**
+> "You'll hear about 'custom GPTs' and 'Claude Skills'. Same idea — a custom AI expert you build once and reuse. But *creating* those needs a paid plan. Gemini Gems does the same job for free. So this is the one you'll actually build tonight."
+
+*Mention only:* Claude Projects does the same thing (free, 5 projects). Claude Skills and custom GPTs are **paid to create** — on free you can only run ones others made. Scheduled recurring quizzes are **paid** too — don't follow along.
 
 **Demo 3 — your phone camera is an input (5 min).** Photograph your messiest handwritten notes:
 
@@ -347,17 +401,17 @@ Convert these handwritten notes into clean structured notes.
 Flag anything you couldn't read clearly rather than guessing it.
 ```
 
-Then the ECG/histology image:
+Then the diagram/chart image:
 
 ```
-Walk me through reading this systematically, step by step, the way
-I'd be expected to present it in an OSCE. Don't just give me the
-diagnosis — teach me the method.
+Walk me through reading this figure step by step, the way I'd need
+to explain it to someone else. Don't just tell me the answer — teach
+me the method.
 ```
 
 > "Note what I asked for. Not the answer — the *method*. Ask for the answer and you learn nothing."
 
-**HANDS-ON (6 min).** Set custom instructions (everyone), then build one Gem if there's time.
+**HANDS-ON (6 min).** Set custom instructions (everyone) — **with their own subject and exam** — then build one Gem / "skill" on their own material if there's time.
 
 **Fallback:** recording `06`.
 
@@ -367,16 +421,17 @@ diagnosis — teach me the method.
 
 > **How not to get burned. This is the part that matters most in your profession.**
 
-**The three failure modes that matter in medicine:**
+**The three failure modes that matter — and land hardest in medicine:**
 
-1. **Outdated guidelines** — training data has a cutoff; guidelines move.
-2. **Fabricated citations** — papers that do not exist, with real-looking DOIs.
-3. **Region mismatch** — US/UK guidance ≠ Pakistani practice, local drug availability, or local resistance patterns. *This one will bite them and they've never thought about it.*
+1. **Outdated information** — training data has a cutoff; facts, prices, and guidelines all move.
+2. **Fabricated citations** — papers, quotes, and references that don't exist, with real-looking details.
+3. **Context mismatch** — advice written for another country, system, or year that doesn't apply to yours. *For medics: US/UK guidance ≠ Pakistani practice, local drug availability, resistance patterns — they've never thought about it.*
 
 **Demo — catch a fake citation live (7 min).** Play recording `07`, or run it live:
 
 ```
-Give me 5 peer-reviewed references supporting [claim], with DOIs.
+Give me 5 peer-reviewed references, with DOIs, on the history of
+the ballpoint pen.
 ```
 
 Take one DOI → doi.org → nothing. Or Google Scholar → no such paper.
@@ -392,7 +447,7 @@ Take one DOI → doi.org → nothing. Or Google Scholar → no such paper.
 4. "Which fact here is most likely to be out of date?"
 ```
 
-Plus the hard rule: **never accept a number — a dose, a cutoff, a lab value — without a source you can open.**
+Plus the hard rule: **never accept a number — a dose, a date, a statistic — without a source you can open.**
 
 **Ethics, 3 minutes, no sermon (5 min).** Be blunt and be honest:
 
@@ -406,53 +461,51 @@ Plus the hard rule: **never accept a number — a dose, a cutoff, a lab value �
 
 **Pick your target on the day** based on the break-time conversations:
 
-| Target | Best when the room is | Prompt |
+| Target | Good for | Prompt |
 |---|---|---|
-| **OSCE checklist app** | Mostly clinical years | See A below |
-| **Spotting/flashcard trainer** | Mostly 1st–2nd year | See B below |
-| **Dose calculator** | Mixed, wants high wow | See C below — **disclaimer required** |
+| **Flashcard / quiz app** | any room — safest default | See A below |
+| **Image-label quiz trainer** | visual subjects | See B below |
+| **Study-timer app** | simplest build, still a "wow" | See C below |
 
 Open **Claude Code**. Narrate what you're doing as you type — they've never seen an engineer work.
 
-**A — OSCE checklist**
+**A — Flashcard quiz app**
 ```
-Build a single-page web app: an OSCE examination checklist trainer
-for medical students. Let me pick a station (cardiovascular exam,
-respiratory exam, abdominal exam). Show the steps as tickable items
-grouped into intro / exposure / inspection / palpation / percussion
-/ auscultation / closing. Track a score as I tick, run a timer, and
-at the end show which steps I missed. Clean, mobile-friendly,
-works offline in a single file.
+Build a single-page web app: a flashcard quiz trainer. Let me type in
+a list of question/answer pairs. It then quizzes me one at a time,
+hides the answer until I click, tracks my score, and at the end
+re-shows only the ones I got wrong. Clean, mobile-friendly, works
+offline in a single file.
 ```
 
-**B — Spotting trainer**
+**B — Image-label quiz trainer**
 ```
-Build a single-page web app for anatomy spotting practice. I upload
+Build a single-page web app for image-label quiz practice. I upload
 images and add a label for each. It then quizzes me one image at a
-time with a 30-second timer per image, hides the label until I
-answer, tracks my score, and at the end re-shows only the ones I got
-wrong. Mobile-friendly, single file, works offline.
+time with a 30-second timer, hides the label until I answer, tracks
+my score, and at the end re-shows only the ones I got wrong.
+Mobile-friendly, single file, works offline.
 ```
 
-**C — Dose calculator**
+**C — Study-timer app**
 ```
-Build a single-page paediatric weight-based dose calculator for
-teaching purposes. Input: weight, drug from a small preset list,
-mg/kg. Output: dose per administration and per day, with the
-calculation shown step by step so a student learns the method.
-Display a permanent prominent banner: "TEACHING DEMO ONLY — NEVER
-USE FOR PATIENT CARE." Mobile-friendly, single file.
+Build a single-page study-timer web app. Let me set a focus length
+and a break length, then run a countdown that switches between focus
+and break automatically and counts how many focus sessions I've done
+today. Clean, mobile-friendly, works offline in a single file.
 ```
 
-> **If you build C, say the disclaimer out loud, twice.** You are in a room of future prescribers.
+> **Whichever you pick, keep it to one clean feature that visibly works** — a small app that runs beats an ambitious one that half-breaks live.
 
 **Then share the link and let it open on their phones in the room.** That immediacy *is* the wow. Wait for the noise.
 
 **Then the honest bridge — do not skip this:**
 
-> "That's Claude Code. It's the paid tool I use for actual work, and I'm not pretending you're all going to buy it tomorrow. But this idea — describing what you want and getting working software — that part is free. Claude Artifacts. Gemini Canvas. Tonight, on a free account."
+> "I built you a generic one so you could see it's possible. But you know your field — you could build the OSCE checklist, the drug-dose trainer, the anatomy spotting deck. I couldn't; I don't know what goes in them. You do."
 
-> "You just watched a person who has never opened your anatomy syllabus build you a study tool in four minutes. You know exactly what you need. That's the part I can't do."
+> "That's Claude Code — the paid tool I use for real work, and I'm not pretending you'll all buy it tomorrow. But the *idea* — describing what you want and getting working software — is free. Claude Artifacts. Gemini Canvas. Tonight, on a free account."
+
+> "You just watched someone who has never opened your syllabus build a working study tool in four minutes. You know exactly what you need. That's the part I can't do."
 
 **Fallback:** recording `08`. **Never skip the finale — play the recording instead.**
 
@@ -482,7 +535,7 @@ Then leave the **Mode 4 four-habits** on screen (retype them into whatever tool 
 |---|---|
 | **Wifi dies** | Switch to recordings folder. Say: "This is why you always have a backup — and that's true for your presentations too." Turn it into a point. |
 | **Demo produces a boring answer** | Say so out loud. "That's a weak answer — watch what happens when I give it more to work with." Recovering visibly builds *more* trust than a clean run. |
-| **Model refuses a clinical prompt** | Reframe as education: "I'm a medical student practising for an exam." Have this ready — it happens with dose/diagnosis prompts. |
+| **A student's clinical prompt gets refused** | Reframe as education: "I'm a medical student practising for an exam." Have this ready — it can happen with dose/diagnosis prompts in the hands-on. |
 | **Hands-on stalls the room** | Hands-on is optional and time-boxed. Announce the time, then move on regardless. Don't let 5 stuck people hold 45. |
 | **Someone challenges you on cheating** | Don't get defensive. "Fair. That's exactly why Mode 4 exists and why I told you what I did as a student." |
 | **Someone asks a deep clinical question** | "You're the doctor in this room, not me." Genuine, and it lands well. |
@@ -493,13 +546,13 @@ Then leave the **Mode 4 four-habits** on screen (retype them into whatever tool 
 
 ## PART 4 — THE NIGHT-BEFORE CHECKLIST
 
-- [ ] NotebookLM notebook built with 3 real sources, tested
+- [ ] NotebookLM notebook built with 3 sources on your example topic, tested
 - [ ] Audio Overview pre-generated (it takes minutes — do not generate live)
 - [ ] All 7 recordings (`02`–`08`) captured and in one folder
 - [ ] Mode 4 fake-citation prepared: a fabricated DOI captured (screenshot + recording `07`) and verified as fake at doi.org
 - [ ] Gem built once as a rehearsal, then deleted so you can build it live
 - [ ] Claude Code finale run once end-to-end — know how long it actually takes
-- [ ] Handwritten-notes photo + ECG/histology image on phone
+- [ ] Handwritten-notes photo + a diagram/chart image on phone
 - [ ] Speakers tested at hall volume
 - [ ] Phone mirroring tested
 - [ ] This guide open on your second screen / phone (NOT projected)
