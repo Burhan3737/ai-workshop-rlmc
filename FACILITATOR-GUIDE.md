@@ -1,14 +1,16 @@
-# Facilitator Guide — "Stop Asking. Start Building."
+# Facilitator Guide — "Your Co-Pilot, Not Your Pilot"
 
 **AI as a tool for medical students · RLMC**
-Duration: 2 hr 50 min (incl. 10 min break) · Audience: 20–50 MBBS students, mixed years · Devices: phones + some laptops
+Duration: ~2 hr 40 min (incl. 10 min break) · Audience: 20–50 MBBS students, mixed years · Devices: phones + some laptops
 
 > **The one sentence this workshop exists to deliver:**
-> *You already use AI to get answers. Almost nobody in this room uses it to be examined, to be grounded in their own material, or to build something. That's the gap.*
+> *You already use AI to get answers. The gap is using it to work with your own material, to examine you, and to build — with your hands on the controls the whole time.*
 
-> **How to run this workshop:** there is no slide deck. **Your screen is the show.** You live-drive the actual tools — NotebookLM, Gemini, Claude, Claude Code — and the students watch you do real things, not slides about them. This document is your private script: keep it open on a second screen, your phone, or a printout. Nothing in here is meant to be projected. Part 2 is a minute-by-minute run sheet; the **bold quoted lines are what you say out loud**, the `code blocks` are what you paste into the tool on screen.
+> **The through-line:** everything climbs one ladder — **write a better prompt → ground it in your own notes → make it test you → make it reusable → keep it honest → delegate whole tasks to an agent.** Each rung is more powerful than the last, and you stay the pilot at every step.
 
-> **You are not the medical expert — and the demos don't ask you to be.** The demos *you drive* use plain, everyday general-knowledge topics anyone in the room can follow and fact-check — this guide uses **the water cycle, the solar system, photosynthesis, compound interest, and the history of the ballpoint pen**. Use them as written, or swap in anything you know cold; you're teaching the *technique*, not the subject. (The document-based demos — Mode 1 and the Gem — stay on **the water cycle** throughout, because they build on the same uploaded notes.) Every *hands-on block* then flips it: students load their **own real course material** — that's where the medical content belongs, supplied by the people who can actually judge it. The medical *framing* stays (it's why this matters to them); only the demo *content* is generic.
+> **How to run this workshop:** there is a slide deck (`deck.html`) — put it on the projector — but **your screen is still the show.** You live-drive the real tools (Gemini, NotebookLM, Claude, Claude Code) and the students watch you do real things. This document is your private script: keep it open on a second screen or your phone, never mirrored. The **bold quoted lines are what you say out loud**; the `code blocks` are what you paste into the tool on screen.
+
+> **You are not the medical expert — and the demos don't need you to be.** Levels 1 and 5 use a neutral, general topic you can run confidently (this guide uses **photosynthesis** for the prompt lesson). Levels 2, 3 and 4 use **a sample lecture on a neutral academic topic in your demo**, and in the **hands-on the students switch to their own real lecture notes** — that's where the medical content lives, supplied by the people who can actually judge it. The medical *framing* stays (it's why this matters to them); only the demo *content* is generic.
 
 ---
 
@@ -18,197 +20,123 @@ Duration: 2 hr 50 min (incl. 10 min break) · Audience: 20–50 MBBS students, m
 
 | Tool | Link | Why | Your account |
 |---|---|---|---|
-| **NotebookLM** | notebooklm.google.com | Mode 1 — grounded answers with citations | Free Google account |
-| **Gemini** | gemini.google.com | Mode 2 voice, Mode 3 Gems | Free Google account |
-| **Gemini app (mobile)** | iOS/Android store | Gemini Live voice demo | Same account |
-| **Claude** | claude.ai | Mode 3 Projects, Mode 4, free Artifacts | Free tier fine |
-| **Claude Code** | claude.com/product/claude-code | **Finale — yours only, paid** | Your existing plan |
+| **Gemini** | gemini.google.com | L1 prompting, L3 quiz, L4 Gems | Free Google account |
+| **NotebookLM** | notebooklm.google.com | L2 — grounded answers with citations | Free Google account |
+| **Gemini app (mobile)** | iOS/Android store | optional voice "quiz me" | Same account |
+| **Claude** | claude.ai | L5 free build (Artifacts), comparison | Free tier fine |
+| **Claude Code** | claude.com/product/claude-code | **L5 agent + build demo — yours only, paid** | Your existing plan |
 | ChatGPT | chatgpt.com | Optional comparison only | Free |
 
 ### B. Free-tier limits — memorise these, students will ask
 
 | Tool | Free limit that matters | Consequence for the room |
 |---|---|---|
-| NotebookLM | 50 sources/notebook · 100 notebooks · 50 chats/day · ~3–5 audio overviews/day | Generous. Safe for hands-on. |
+| NotebookLM | 50 sources/notebook · 50 chats/day · ~3–5 audio overviews/day · Discover sources + URL + YouTube as inputs | Generous. Safe for hands-on. |
 | Gemini | ~30 prompts/day · Gems unlimited (10 files each) · Live voice free on mobile | Safe, but tell them to spend prompts wisely |
-| Claude | Projects (5 max) · Artifacts · 20 files/chat · budget resets ~every 5 hrs | Safe. **No Claude Code on free.** |
-| **ChatGPT** | **3 file uploads per day** · voice = short daily preview | **Do NOT route file or voice hands-on here.** This is the trap. |
-| Gemini Scheduled Actions | **Paid** (AI Plus ~$4.99/mo) | Mention only. Never ask them to follow along. |
+| Claude | Artifacts free · Projects (5 max) · 20 files/chat · budget resets ~every 5 hrs | Safe. **No Claude Code / agents on free.** |
+| **ChatGPT** | **3 file uploads per day** · agent mode is **paid** | Don't route file hands-on here. Agents aren't free. |
 
-> **Rule for the day:** every single thing you ask a student to *do* must work on a free account. Paid tools appear only as *"here's the ceiling"* — clearly labelled, never followed along.
+> **Rule for the day:** every single thing you ask a student to *do* must work on a free account. Paid tools (Claude Code, agents) appear only as *"here's the ceiling"* demos — clearly labelled, never followed along.
 
-### C. Files to prepare (night before)
+### C. Files to prepare (night before) — your demo set only
 
-*This is the **facilitator's demo set** — all on one neutral topic you know well (this guide uses **the water cycle**). Students bring their own real course material for the hands-on parts; you don't need any.*
+*All on one neutral academic topic you're comfortable with. Students bring their own real course material for the hands-on parts; you don't need any of it.*
 
-1. **A short explainer/notes PDF** on your example topic — e.g. the Wikipedia article on the water cycle exported to PDF, or any 5–15 page explainer. *(NotebookLM notebook + the Mode 3 Gem — this is your "lecture notes".)*
-2. **A one-page set of practice questions** on the same topic. Don't have one? Generate it with AI the night before and save as PDF. *(NotebookLM notebook — this is your "past paper"; it powers the gap-analysis demo.)*
-3. **A second source** on the same topic (another article/chapter PDF). *(NotebookLM notebook — adds depth.)*
-   *Items 1–3 become the NotebookLM notebook. Load them the night before, not live.*
-4. **A simple one-page outline** of the topic's subtopics. *(Mode 3, Demo 2 — you upload this into the "Topic Tutor" Gem live; it stands in for a syllabus.)*
-5. **A photo of some handwritten notes** on your phone (messy is better — it's more impressive). Any subject. *(Mode 3, Demo 3.)*
-6. **A photo of any diagram, chart, or figure** you can talk about — a graph, a labelled diagram, an infographic. *(Mode 3, Demo 3 — you'll ask the AI to "read" it.)*
-7. **2–3 labelled images** — *only if you might pick the image-quiz finale (Target B)*; any images with labels (flags, landmarks, logos — anything). You upload these into the app you build. The other two finale targets need no files.
+1. **A sample lecture slide or short PDF** on a neutral topic — photosynthesis, the water cycle, anything school-level. *(L2 grounding demo + L3 quiz demo + L4 Gem demo — this stands in for "your lecture".)*
+   - *Easiest source:* in NotebookLM just click **Discover sources**, type the topic, and add what it finds — no file needed. Or paste a Wikipedia URL / YouTube link.
+2. **A photo of any diagram or figure** you can talk about (a graph, a labelled diagram). *(Optional multimodal moment in L2/L4.)*
+
+That's it. L1 is typed live; L5 is built live.
 
 ### D. Recordings to capture (night before) — NON-NEGOTIABLE
 
-Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record every demo below and keep them in one folder on your laptop. *(Numbered `02`–`08` to match the run-sheet fallbacks — there is no `01`; the old opening broken-demo was cut, and its fabrication point now lives in Mode 4 / recording `07`.)*
+Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record every demo below and keep them in one folder, numbered.
 
-- [ ] `02` — NotebookLM cited answer
-- [ ] `03` — NotebookLM Audio Overview playing
-- [ ] `04` — viva examiner exchange
-- [ ] `05` — Gemini Live role-play + debrief
-- [ ] `06` — Gem being built + used
-- [ ] `07` — fake citation being caught
-- [ ] `08` — **Claude Code building the app, start to finish**
+- [ ] `01` — NotebookLM cited answer + a citation click (L2)
+- [ ] `02` — NotebookLM Audio Overview playing (L2)
+- [ ] `03` — the "quiz me" exchange (L3)
+- [ ] `04` — a Gem / "Study Coach" being built and used (L4)
+- [ ] `05` — an agent researching + writing a summary (L5)
+- [ ] `06` — **Claude Code building the study app, start to finish** (L5)
 
-`08` is the most important recording you will make. If the finale fails live, the workshop's closing moment fails with it.
+`06` is the most important recording you'll make. If the finale fails live, the closing moment fails with it.
 
-### E. The Mode 4 fake-citation demo — capture this in advance
-
-**You cannot rely on a model failing on cue** — *especially* now that even the free models are strong. That's exactly why the fabrication you show in **Mode 4 (Verify)** is prepared the night before, not gambled on live. Fish for a good failure, screenshot it and capture recording `07`, and have it ready.
-
-What still reliably breaks — even on a good, current model — try these with web search **off**:
-
-```
-List 5 peer-reviewed papers, with DOIs, on the cultural history of coffee.
-```
-
-```
-Quote the exact wording of clause 4.2 of the ISO 9001 standard,
-word for word.
-```
-
-Then check the DOIs at doi.org. Screenshot one that resolves to nothing. **That's your Mode 4 payoff** — see the run sheet at `02:00–02:20`.
-
-### F. Room setup
+### E. Room setup
 
 - [ ] Laptop + HDMI tested, screen mirroring confirmed
-- [ ] **Speakers tested and loud** — two demos are audio (Audio Overview, Gemini Live)
-- [ ] **A handheld mic (or the room mic) tested** — Mode 2 puts a student volunteer on the mic for the viva and the Gemini Live role-play; the whole room must hear them
-- [ ] Know you'll need **two student volunteers in Mode 2** (the viva examinee + someone for the live role-play/interview) — recruit them on the spot; nothing to pre-arrange, just don't be caught off guard
-- [ ] Phone screen-mirroring working (for the Gemini Live role-play demo) — or hold the phone to a mic
+- [ ] **Speakers tested and loud** — two demos are audio (Audio Overview, and narrating the agent build)
+- [ ] `deck.html` open full-screen on the projector; arrow keys advance it
 - [ ] Recordings folder open in a second window (your fallback if wifi dies)
 - [ ] This guide open on a **second screen or your phone** — never mirrored to the projector
 - [ ] Browser zoom bumped to ~125% so the back row can read what you type
-- [ ] Each tool open in its own tab, in running order: NotebookLM → Gemini → Claude → Claude Code
+- [ ] Each tool open in its own tab, in running order: Gemini → NotebookLM → Claude → Claude Code
 - [ ] Browser: log into all accounts **before** students arrive, close every unrelated tab
-- [ ] Phone on Do Not Disturb if mirroring it
+- [ ] *(Optional)* phone mirroring ready if you want to show voice "quiz me"
 
 ---
 
 ## PART 2 — RUN SHEET
 
-### `00:00–00:10` — OPENING: the honest start
+> Bold quoted lines = **what you say**. Code blocks = **what you paste**.
 
-**Start with them, not you. Two open questions first — just let them shout answers. This warms the room and hands you the setup for everything that follows.**
+### `00:00–00:12` — OPENING: the honest start + how it actually works
 
-**Question 1 — "What is AI?" (2 min).** Take 3–4 answers. Do not correct a single one:
-
-> "Before I show you anything — what actually *is* this thing? If you had to say what AI is, in your own words, what would you say?"
-
-*You'll hear: "a robot", "a computer brain", "ChatGPT", "it knows everything", "the future".* Don't judge, don't correct — just collect them.
-
-> "Hold onto your answer. In ten minutes you'll know exactly which of you were right."
-
-**Question 2 — "How do you actually use it?" (2 min).** Honest answers, no judgement:
-
-> "And right now — how do you actually use it, day to day? Be honest, I'm not marking you."
-
-*You'll hear: assignments, summaries, "explain this topic", making notes.* This is the baseline you're about to expand.
-
-**Now the poll — sharpen the gap. Do not skip it; the whole workshop hangs off the gap it reveals.**
+**Two questions, hands up. Warms the room and sets up the whole day.**
 
 > "Hands up if you've used AI this week."
-> *(every hand goes up — wait for it)*
+> *(every hand)*
 > "Keep it up if you used it for something that wasn't an assignment, a summary, or 'explain this topic to me.'"
-> *(almost every hand drops — let the silence sit for a beat)*
-> "That's it. That's why we're here."
+> *(almost every hand drops — let the silence sit)*
+> "That gap is the entire workshop."
 
-**Then own your own story.** This is what buys you the room:
+**Your story — this is what buys you the room:**
 
-> "I'm a software engineer. When I was a student I used AI to finish assignments. That's it. That's all I used it for. I'm not here to lecture you about that — I'm here because I found out afterwards that I was using maybe 5% of it."
+> "I'm a software engineer. As a student I used AI to finish assignments. That's all. I found out later I was using maybe 5% of it. Before I show you the rest — a quick game, because you can't use this thing well until you know what it actually is."
 
-> "But before I show you the 5%, we're going to play a game — because you can't use this thing well until you know what it actually is. And almost nobody does."
+**The next-word game (no tools, no wifi — runs on the room).** Say a stem, cut yourself off, let them shout the next word:
 
----
-
-### `00:10–00:20` — HOW IT ACTUALLY WORKS: the next-word game
-
-> **The whole point: an LLM is not a brain and not a search engine. It is a machine that predicts the next word. That's it. Everything else — the genius and the danger — falls out of that one fact.**
-
-*No tools, no wifi, no screen needed. This runs entirely on the room. If the internet is down when you start, start here anyway.*
-
-**Round 1 — the obvious one (2 min).** Say the stem, cut yourself off, and let the room shout the next word:
-
-> "Twinkle, twinkle, little…"
-
-The room shouts **"STAR."** Do two or three more:
-
+> "Twinkle, twinkle, little…" → *STAR*
 > "Better late than…" → *never*
 > "Salt and…" → *pepper*
-> "Once upon a…" → *time*
 
-*(A medical room warms up even faster to medical stems — "the patient presented with chest…" → PAIN. Use those instead if you're comfortable; the point is identical.)*
+> "Nobody looked anything up. You just knew what usually comes next. **That is exactly what an AI does** — it read most of the internet, and all it learned was: given the words so far, what word probably comes next. Then it does it again, faster than you can read. There's no fact-box inside it. It's the most powerful autocomplete ever built."
 
-**Say the line:**
-> "Notice you all said the same word. Nobody looked anything up. You just knew what usually comes next. Hold onto that — you just did exactly what the AI does."
+**Land the two consequences:**
 
-**Round 2 — the fork (3 min).** Now a stem with more than one good answer:
+> "That's why *how you phrase things* changes everything — you're giving it better words to predict from. And it's why it can be **confidently, beautifully wrong** — a plausible answer and a true answer look identical to it. Hold that thought; we come back to it."
 
-> "I walked into the kitchen and picked up the…"
+> "So here's the deal for today: **AI is your co-pilot, not your pilot.** You stay in the driver's seat the whole time. We're going to climb five levels of doing exactly that."
 
-You'll hear *kettle, cup, knife, phone, spoon.* **Say the line:**
-> "See what happened? It's not one answer — it's a spread of likely ones, each with a probability. The AI keeps a list exactly like that, then picks one. Change which one it picks and you get a slightly different sentence every time. That's why it never answers the same way twice."
-
-**Round 3 — the reveal (4 min).** Call back to their "What is AI?" answers from the top, then land what they just proved:
-
-> "At the start I asked what AI is. Some of you said a robot, a brain, something that knows everything. Here's the honest answer: it's none of those. That is *all* a large language model does — it read basically the whole internet, every textbook, every paper, every forum, and all it learned was: given the words so far, what word probably comes next. Then it does that again. And again. One word at a time, faster than you can read. There is no fact-box inside it. No library it looks things up in. It's the most powerful autocomplete ever built."
-
-**Then the trap that makes the rest of the day matter (3 min):**
-
-> "So watch what happens when I ask it for a reference. It has never seen your exact paper — but it has seen *thousands* of references. So it predicts what a reference should *look like*: a plausible author, a real-sounding journal, a DOI in the right format. It's not lying to you. It literally cannot tell the difference between a real citation and a citation-shaped sentence. It's just finishing the pattern."
-
-> "And here's the thing — these models have got *very* good. The free one in your pocket is genuinely impressive. But 'impressive' and 'trustworthy' are different words. A confident, perfectly-formatted answer and a *true* answer look identical, and the machine can't tell them apart. I'm going to prove that to you live later, in the part on verifying — hold the thought until then."
-
-> "In your field, a confident wrong answer isn't a typo. It's a patient. So everything I show you now is really about one thing: how to steer this thing toward true, and how to catch it when it isn't."
-
-**Frame the session.** Four shifts, then we build something.
-
-`GROUND IT → FLIP IT → AUTOMATE IT → VERIFY IT → BUILD IT`
-
-> *But first — the one skill sitting under all of them.*
+**Show the roadmap slide.** `PROMPT IT → GROUND IT → FLIP IT → AUTOMATE IT → (VERIFY) → DELEGATE IT`
 
 ---
-// Moreover prompting is the foundation of every agent/llm we talk with, its what forms the basis of hwo we communcicate wiht an llm model and that the only skill we need tod evleop right mow (basically note for me here I might give a small speech or create this a discussion point) 
-### FOUNDATION — bad prompt vs good prompt (≈8 min, just before Mode 1)
 
-> **This is not a fifth mode — it's what makes the other four work.** Every mode below is just a *good* prompt pointed at a job. So before the tools, one skill: how to actually talk to it.
+### `00:12–00:27` — LEVEL 1: PROMPT IT
 
-*This adds ~8 min. The timestamps below don't include it — either shift them all back ~8 min, or buy the time back from a later hands-on (see Contingencies). Don't cut this.*
+> **It only flies as well as you steer it. Level one is learning to give it a good instruction.**
 
-**Show the difference live, same topic, side by side.**
-
-**The bad prompt** — type it, let the vague answer land:
+**The bad prompt — type it live, let the vague wall of text land:**
 
 ```
-tell me about the water cycle
+what is photosynthesis
 ```
 
 > "Technically correct. Totally useless — a wall of text, because I gave it nothing to aim at."
 
-**The good prompt** — same topic, four things added:
+**The good prompt — same topic, four things added:**
 
 ```
-You are a tutor for a student revising for an exam (ROLE).
-I keep mixing up the stages of the water cycle (CONTEXT).
-Explain it in 5 simple steps, then give me 3 quick questions to test
-myself (TASK). Keep it under 200 words, no jargon (FORMAT).
+You are a biology tutor (ROLE).
+I'm revising for an exam and keep mixing up the light and dark
+reactions of photosynthesis (CONTEXT).
+Explain it in 5 simple steps with one everyday analogy, then ask
+me 3 questions to test myself (TASK).
+Keep it under 200 words, no jargon (FORMAT).
 ```
 
-> "Same model, same topic. The only thing that changed is I told it *who to be, what I need, what to do, and what shape to hand back*. That's the whole skill."
+> "Same model, same topic. The only thing that changed is I told it **who to be, what I need, what to do, and what shape to hand back.** That's the whole skill."
 
-**The takeaway — put it on screen and tell them to photograph it:**
+**The takeaway — put it on screen, tell them to photograph it:**
 
 ```
 A good prompt has four parts:
@@ -218,137 +146,85 @@ TASK    — what to actually do    ("explain, then quiz me")
 FORMAT  — the shape to hand back ("5 steps, under 200 words, no jargon")
 ```
 
-> "You'll see all four in every prompt I use for the rest of today. Watch for them."
+**HANDS-ON (5 min).** Everyone takes a lazy prompt about something they're studying and rewrites it with all four parts. *Walk the room.*
 
 ---
 
-//before starting this section i need to present them a summary of what we would be discussing today (i.e a plan for today)
-### `00:20–00:50` — MODE 1: GROUND IT
+### `00:27–00:55` — LEVEL 2: GROUND IT
 
-> **Stop asking what it remembers. Make it read what you gave it.**
+> **Stop asking what it remembers. Make it read what you gave it. This is where it becomes *your* co-pilot.**
 
-**Go to:** notebooklm.google.com (notebook pre-loaded from prep step C)
+**Go to:** notebooklm.google.com
 
-**Demo 1 — the citation (5 min).** Ask your notebook:
+**Demo 1 — feed it real material (5 min).** Add your sample lecture (Discover sources → your topic, or upload the slide). Then ask:
 
 ```
 Using only my sources, give me a one-page high-yield summary of
-the water cycle for revision. Cite the slide or page number for
-every claim.
+this lecture. Cite the slide or page number for every point.
 ```
 
-Click a citation. It jumps to the exact slide. **Say the line:**
-> "It's not remembering. It's reading. And it's showing you where it got it."
+Click a citation. It jumps to the exact spot. **Say the line:**
+> "It's not remembering. It's reading your material — and showing you where it got every line. That's the difference between a co-pilot and a party trick."
 
-**Demo 2 — the refusal (3 min).** Ask something deliberately outside the sources.
+**Demo 2 — the refusal (3 min).** Ask something deliberately outside the sources:
 
 ```
 What do my notes say about the French Revolution?
 ```
 
-It says it isn't in your sources. **Say the line:**
-> "It just said 'I don't know.' Your chatbot almost never does that. That's the whole difference."
+> "It just said 'that's not in your sources.' Your normal chatbot almost never does that. That honesty is the whole point of grounding."
 
-**Demo 3 — the gap analysis (5 min).** This is the one they'll actually use tonight:
-
-```
-Compare my notes against the practice questions. What comes up in
-the questions that my notes do NOT cover? List it as a revision
-checklist.
-```
-
-**Demo 4 — Audio Overview (7 min).** Generate it, then **play it out loud.** Customise first:
+**Demo 3 — Audio Overview (7 min).** Generate it, then **play it out loud**:
 
 ```
-Focus on the water cycle. Explain it at the level of a student
+Focus on this lecture. Explain it at the level of a student
 revising for an exam. Emphasise the points most likely to be tested.
 ```
 
-> "That's your commute. That's the queue at the canteen. Your lecture deck is now a podcast."
+> "Two AI hosts discussing your own lecture. That's your commute. That's the queue at the canteen. Your lecture deck is now a podcast."
 
-**HANDS-ON (10 min).** Everyone opens notebooklm.google.com and uploads **one of their own real lecture PDFs** — this is where the medical content comes in, theirs not yours — asks one question, hits Generate Audio Overview.
-*Walk the room. Expect: file too large, wrong Google account, unsupported format. Nobody is stuck for more than 2 min — pair them up.*
+**HANDS-ON (10 min).** Everyone opens notebooklm.google.com and adds **one of their own real lectures** — this is where the medical content comes in, theirs not yours (upload a PDF, paste a slide's text, or use Discover sources). Ask one question, click a citation, hit **Generate Audio Overview**.
+*Walk the room. Expect: file too large, wrong Google account. Nobody stuck more than 2 min — pair them up.*
 
-**Fallback:** recordings `02`, `03`.
-
----
-
-### `00:50–01:20` — MODE 2: FLIP IT
-
-> **It shouldn't answer your questions. It should ask you questions.**
-
-**Demo 1 — the viva examiner (10 min). Get a volunteer on the mic.**
-
-Paste into Claude or Gemini:
-
-```
-You are a tough oral examiner for my course. Examine me on
-the solar system.
-
-Rules:
-- Ask ONE question at a time, then wait for my answer.
-- Never give me the answer.
-- If I'm vague or wrong, probe deeper the way a real examiner does.
-- Escalate difficulty as I do well.
-
-After 8 questions, stop and give me: my score out of 10, the two
-gaps that would have failed me, and exactly what to revise tonight.
-```
-
-Ask the volunteer what they're studying and swap the topic in — let them squirm a little on their own subject. It's more memorable than a smooth run.
-
-**Demo 2 — the live role-play partner (12 min). THE MOMENT OF THE WORKSHOP.**
-
-Open **Gemini Live on your phone** (mirrored/held to mic). Voice mode, speak this:
-
-```
-You are an interviewer for a university admission (or a job). Stay in
-character at all times — never break character.
-
-Ask me realistic questions one at a time and wait for my answer. Be a
-little challenging, the way a real interviewer is. Don't coach me
-mid-answer.
-
-When I say "END", drop character and tell me: how I came across, my
-two weakest answers, and exactly what to improve.
-```
-
-Bring a **volunteer** up to be interviewed out loud. Let it run 4–5 min. Then say **END** and read the debrief to the room.
-
-> "You can practise like that every night. For free. Unlimited attempts, and it never gets tired of you."
-
-**Then hand the medical version straight to the room:**
-> "Now — medics, your version of this is gold. Swap 'interviewer' for a patient with a hidden condition who only answers what you actually ask, and you've got an endless supply of history-taking and communication practice. Same technique, your subject. That's exactly what tonight's hands-on is about."
-
-**Demo 3 — the Feynman check (5 min).**
-
-```
-I'm going to explain photosynthesis to you as if you're the examiner.
-Don't correct me while I talk. When I finish, tell me: which parts
-I actually understood, which parts I was reciting without
-understanding, and the one question an examiner would ask to
-expose the gap.
-```
-
-> "That last one is the difference between passing and being caught out."
-
-**HANDS-ON (5 min).** Pairs. One person runs a 3-min viva on **a topic from their own course** — their material, their subject.
-
-**Fallback:** recordings `04`, `05`.
+**Fallback:** recordings `01`, `02`.
 
 ---
 
-### `01:20–01:30` — BREAK
+### `00:55–01:13` — LEVEL 3: FLIP IT
 
-Leave the last Mode 2 result up on screen. Walk the room, answer questions, and — most important — find out what block people are in and what they're stuck on, so you can pick the finale build target during the break.
+> **It shouldn't just answer your questions. It should ask you questions. This is the single best way to actually learn.**
+
+**Demo — the examiner (8 min).** Keep the same lecture material in play (Gemini with the slide attached, or your NotebookLM notebook):
+
+```
+Quiz me on this lecture. One question at a time — wait for my
+answer, never give it to me. If I'm vague, probe deeper. Escalate
+as I do well. After 8 questions, score me out of 10 and tell me
+the two things I need to revise tonight.
+```
+
+Answer a couple wrong on purpose — the probing is the wow. **Then the meta-punchline:**
+> "Notice what just happened — it *tested* me instead of *telling* me. Testing yourself is the single best-evidenced way to make something stick. You just learned the technique by having it done to you."
+
+*(Optional voice: run the same thing through Gemini Live on your phone — "quiz me out loud" — for hands-free revision.)*
+
+**HANDS-ON (5 min).** Pairs. One person has the AI run a **3-minute quiz** on a topic from their own course. The other watches how hard it pushes.
+
+**Fallback:** recording `03`.
 
 ---
 
-### `01:30–02:00` — MODE 3: AUTOMATE IT
+### `01:13–01:23` — BREAK
 
-> **My engineer's lens: if you type the same instructions twice, you've already lost.**
+Ten minutes. Walk the room, answer questions, and find out what people are studying — you'll fold real examples into Verify and the finale.
 
-**Demo 1 — memory / custom instructions (7 min).** *Everyone does this one, it takes 2 minutes and improves every conversation they have for the rest of the year.*
+---
+
+### `01:23–01:45` — LEVEL 4: AUTOMATE IT
+
+> **If you set it up once and use it all semester, you never rebuild it. This is what people mean by giving AI a "skill."**
+
+**Move 1 — custom instructions (5 min).** *Everyone does this — two minutes, improves every chat they have for the rest of the year.*
 
 Claude → Settings → Profile · Gemini → Settings → Saved info · ChatGPT → Settings → Personalization
 
@@ -359,86 +235,57 @@ When you answer me:
 - Explain in clear, simple steps.
 - Structure answers as: definition → key points → example →
   common mistakes.
-- Tell me how confident you are, and what I should double-check in a
-  trusted source.
+- Tell me how confident you are, and what I should double-check
+  in a trusted source.
 - If something is region- or context-specific, flag it.
 ```
 
-> "You write that once. It applies to every conversation you have from now on. Most people never open this screen."
+> "You write that once. It applies to every conversation from now on. Most people never open this screen."
 
-> *To the room:* "In the hands-on you'll write your own. A medic would add: 'use drug names as used in Pakistan, structure answers viva-style, never give a dose without a source.' That's your content — you know what belongs there, I don't."
+> *To the room:* "In the hands-on you write your own — a medic would add: 'use drug names as used in Pakistan, structure answers viva-style, never give a dose without a source.' That's your content; you know what belongs there, I don't."
 
-**Demo 2 — a saved assistant, built live (12 min).** Use **Gemini Gems** (free, unlimited, 10 files each) — gemini.google.com → *Gems* → *New Gem*.
+**Move 2 — build a reusable "skill" (12 min).** Use **Gemini Gems** (free, unlimited) — gemini.google.com → *Gems* → *New Gem*. Load your sample lecture into it.
 
-Name: `Topic Tutor — the water cycle`
+Name: `Study Coach`
 
 ```
-You are my tutor for the water cycle. My notes and outline are in
-your files.
+You are my study tutor. My lecture notes are in your files.
 
 Always:
-- Answer from my uploaded material where possible; say clearly when
-  you're going beyond it.
+- Answer from my uploaded material where possible; say clearly
+  when you're going beyond it.
 - End every answer with one follow-up question to check I understood.
 
 If I say "QUIZ ME", stop teaching and examine me instead: one
 question at a time, no answers given, 8 questions, then score me.
 ```
 
-Upload your outline. Use it. **Then close it and reopen it** — show that it remembered everything.
+Use it, then **close it and reopen it** — show that it remembered everything.
 
-> "That's a tutor that knows your material and your exam format, and it's still there in March. This — a saved, reusable assistant you set up once — is exactly what people mean when they talk about giving an AI a 'skill'."
+> "That's a tutor that knows your material and your exam format, and it's still there in March. **This — a saved, reusable assistant you build once — is what people mean by giving an AI a 'skill'.** You'll hear about 'custom GPTs' and 'Claude Skills'; same idea, but creating those needs a paid plan. Gemini Gems does it for free. So this is the one you build tonight."
 
-**This is your "skills" moment — and it's the free, hands-on one:**
-> "You'll hear about 'custom GPTs' and 'Claude Skills'. Same idea — a custom AI expert you build once and reuse. But *creating* those needs a paid plan. Gemini Gems does the same job for free. So this is the one you'll actually build tonight."
+*Mention only:* Claude Projects does the same (free, 5 projects). Claude Skills and custom GPTs are **paid to create**.
 
-*Mention only:* Claude Projects does the same thing (free, 5 projects). Claude Skills and custom GPTs are **paid to create** — on free you can only run ones others made. Scheduled recurring quizzes are **paid** too — don't follow along.
+**HANDS-ON (5 min).** Set custom instructions (everyone) — with their own subject and exam — then build one Gem on their own lecture if there's time.
 
-**Demo 3 — your phone camera is an input (5 min).** Photograph your messiest handwritten notes:
-
-```
-Convert these handwritten notes into clean structured notes.
-Flag anything you couldn't read clearly rather than guessing it.
-```
-
-Then the diagram/chart image:
-
-```
-Walk me through reading this figure step by step, the way I'd need
-to explain it to someone else. Don't just tell me the answer — teach
-me the method.
-```
-
-> "Note what I asked for. Not the answer — the *method*. Ask for the answer and you learn nothing."
-
-**HANDS-ON (6 min).** Set custom instructions (everyone) — **with their own subject and exam** — then build one Gem / "skill" on their own material if there's time.
-
-**Fallback:** recording `06`.
+**Fallback:** recording `04`.
 
 ---
 
-### `02:00–02:20` — MODE 4: VERIFY IT
+### `01:45–02:03` — VERIFY: HANDS ON THE CONTROLS
 
-> **How not to get burned. This is the part that matters most in your profession.**
+> **Co-pilot, not pilot. Everything above makes AI powerful. This is how you stay the one in charge. It matters most in your profession.**
 
-**The three failure modes that matter — and land hardest in medicine:**
+**Callback to the game:**
+> "Remember — it predicts the next likely word. It doesn't *know* things. So when it doesn't have a fact, it predicts what a plausible one looks like — confidently. A true answer and a made-up one look identical to it. In your field, a confident wrong answer isn't a typo — it's a patient."
 
-1. **Outdated information** — training data has a cutoff; facts, prices, and guidelines all move.
-2. **Fabricated citations** — papers, quotes, and references that don't exist, with real-looking details.
-3. **Context mismatch** — advice written for another country, system, or year that doesn't apply to yours. *For medics: US/UK guidance ≠ Pakistani practice, local drug availability, resistance patterns — they've never thought about it.*
+**The three ways it will burn you:**
 
-**Demo — catch a fake citation live (7 min).** Play recording `07`, or run it live:
+1. **Outdated information** — training has a cutoff; facts, prices, guidelines all move.
+2. **Invented details** — it makes up specific facts, numbers and quotes that sound exactly right.
+3. **Context mismatch** — advice written for another country, system or year. *For medics: US/UK guidance ≠ Pakistani practice, local drug availability, resistance patterns — you've never thought about it.*
 
-```
-Give me 5 peer-reviewed references, with DOIs, on the history of
-the ballpoint pen.
-```
-
-Take one DOI → doi.org → nothing. Or Google Scholar → no such paper.
-
-> "Remember what I promised during the word game at the start — that I'd prove this to you live? Here it is. It's not looking up a paper — it's predicting what a paper should *look* like. That paper does not exist. It doesn't matter how good the model is; this is baked into how it works. And if that citation goes into your research project, it's your name on it, not the AI's."
-
-**The four habits (8 min)** — type these into whatever tool is on screen, big, and tell the room to photograph it. This is the one thing worth them having in their camera roll:
+**So how do you stay in charge? Four habits (8 min) — put them on screen, tell the room to photograph them:**
 
 ```
 1. "Cite it, or tell me you can't."
@@ -449,83 +296,68 @@ Take one DOI → doi.org → nothing. Or Google Scholar → no such paper.
 
 Plus the hard rule: **never accept a number — a dose, a date, a statistic — without a source you can open.**
 
-**Ethics, 3 minutes, no sermon (5 min).** Be blunt and be honest:
-
-> "I'm not going to tell you not to use it for assignments. I did. But your vivas are oral, in person, in front of a consultant who will ask you the follow-up question. If the AI learned it and you didn't, you find that out in the worst possible room. Use it to *get examined*, not to get finished."
+> "Use it to *get examined*, not to get finished. Your viva is oral, in person, in front of a consultant who asks the follow-up. If the AI learned it and you didn't, you find that out in the worst possible room."
 
 ---
 
-### `02:20–02:45` — FINALE: BUILD IT
+### `02:03–02:28` — LEVEL 5: DELEGATE IT — AI THAT DOESN'T JUST ANSWER, IT DOES
 
-> **You are not limited to what someone else built for you.**
+> **Everything so far, you drove — you prompted, you asked. An agent takes a goal and does the work itself, step by step. This is the frontier.**
 
-**Pick your target on the day** based on the break-time conversations:
+*This is a demo you drive. Real agents are the paid/advanced tier — but they show students where all of this is going, and the free build tools let them try the idea tonight.*
 
-| Target | Good for | Prompt |
-|---|---|---|
-| **Flashcard / quiz app** | any room — safest default | See A below |
-| **Image-label quiz trainer** | visual subjects | See B below |
-| **Study-timer app** | simplest build, still a "wow" | See C below |
+**Show its power — build to the climax:**
 
-Open **Claude Code**. Narrate what you're doing as you type — they've never seen an engineer work.
+**Demo 1 — it researches and writes (5 min).** In Claude Code (or ChatGPT agent mode if you have it), give it a goal:
 
-**A — Flashcard quiz app**
 ```
-Build a single-page web app: a flashcard quiz trainer. Let me type in
-a list of question/answer pairs. It then quizzes me one at a time,
-hides the answer until I click, tracks my score, and at the end
-re-shows only the ones I got wrong. Clean, mobile-friendly, works
-offline in a single file.
+Research the main study techniques proven to improve exam
+performance, and write me a one-page summary with sources.
 ```
 
-**B — Image-label quiz trainer**
-```
-Build a single-page web app for image-label quiz practice. I upload
-images and add a label for each. It then quizzes me one image at a
-time with a 30-second timer, hides the label until I answer, tracks
-my score, and at the end re-shows only the ones I got wrong.
-Mobile-friendly, single file, works offline.
-```
+Narrate as it works: *"Watch — it's breaking the goal into steps, gathering, then writing. I'm not doing any of it."*
 
-**C — Study-timer app**
+**Demo 2 — it builds software, live (12 min).** This is the finale. In **Claude Code**, describe a study tool and let it build in front of the room:
+
 ```
-Build a single-page study-timer web app. Let me set a focus length
-and a break length, then run a countdown that switches between focus
-and break automatically and counts how many focus sessions I've done
-today. Clean, mobile-friendly, works offline in a single file.
+Build a single-page web app: a flashcard quiz trainer. Let me type
+in question/answer pairs. It quizzes me one at a time, hides the
+answer until I click, tracks my score, and at the end re-shows only
+the ones I got wrong. Clean, mobile-friendly, works offline in a
+single file.
 ```
 
-> **Whichever you pick, keep it to one clean feature that visibly works** — a small app that runs beats an ambitious one that half-breaks live.
+Narrate as it plans, writes files, and runs. **Then open it on your phone.** Wait for the noise.
 
-**Then share the link and let it open on their phones in the room.** That immediacy *is* the wow. Wait for the noise.
+> "That's an agent. It took a goal and *did* it — planned, wrote the code, ran it, fixed its own mistakes. And notice: it showed me each step and I approved. **Even at full power, it's a co-pilot, not the pilot.** That's the whole idea of today."
 
-**Then the honest bridge — do not skip this:**
+**The honest bridge — do not skip:**
 
-> "I built you a generic one so you could see it's possible. But you know your field — you could build the OSCE checklist, the drug-dose trainer, the anatomy spotting deck. I couldn't; I don't know what goes in them. You do."
+> "Claude Code is the paid tool I use for real work. But the *idea* — describe what you want, get working software — is free tonight: **Claude Artifacts, Gemini Canvas.** And here's the thing: someone who has never opened your syllabus just built you a study tool in four minutes. You know exactly what you need. That's the part I can't do — but now you can."
 
-> "That's Claude Code — the paid tool I use for real work, and I'm not pretending you'll all buy it tomorrow. But the *idea* — describing what you want and getting working software — is free. Claude Artifacts. Gemini Canvas. Tonight, on a free account."
-
-> "You just watched someone who has never opened your syllabus build a working study tool in four minutes. You know exactly what you need. That's the part I can't do."
-
-**Fallback:** recording `08`. **Never skip the finale — play the recording instead.**
+**Fallback:** recordings `05`, `06`. **Never skip the finale — play the recording instead.**
 
 ---
 
-### `02:45–02:50` — CLOSE
+### `02:28–02:38` — CLOSE
 
-Land it:
+**Everyday wins — quick-fire (3 min), so it's not just for studying:**
 
-> "Four shifts. Ground it in your own material. Flip it so it examines you instead of answering you. Automate it so you set it up once. Verify it, always, because it's medicine.
+> "Beyond studying, this saves you time every day." Draft a polite email to a professor · summarise a 20-page PDF into 10 points · build a study timetable around your exam dates.
+
+**Land it:**
+
+> "Five levels. Prompt it well. Ground it in your own material. Flip it so it examines you. Automate it so you build it once. Verify it, always, because it's medicine. And delegate it — where it's all going.
 >
-> If you take one thing: **stop asking it for answers, start asking it to test you.** The exam room doesn't care what the AI knows. It cares what you know."
+> One thing if you take nothing else: **stop asking it for answers, start asking it to test you.** The exam room doesn't care what the AI knows. It cares what you know.
+>
+> **AI is your co-pilot. Not your pilot.**"
 
-**The takeaway — no handout to hand out.** Tell them plainly:
+**The takeaway — no handout.** Tell them plainly:
 
-> "I'm not giving you a sheet. I'm dropping every prompt from today in your class WhatsApp group tonight. Two things I want you to actually do before you sleep: set your custom instructions, and run one viva on whatever you're studying this week."
+> "I'm dropping every prompt from today in your class WhatsApp group tonight. Two things before you sleep: set your custom instructions, and have AI quiz you on whatever you're studying this week."
 
-Then leave the **Mode 4 four-habits** on screen (retype them into whatever tool is open) long enough for the room to photograph it — that's the one thing worth them having in their own camera roll.
-
-> *Optional:* if you'd rather give them something clickable, there's a prompt-copy page that carries every prompt from today, tap-to-copy — `https://claude.ai/code/artifact/ba687e33-6900-4dd7-a6d9-b8fc23e3a49e`. Drop it in the group instead of retyping. It's private until you share it from the page's share menu, so open it up first.
+Leave the **four habits** on screen long enough for the room to photograph them.
 
 ---
 
@@ -533,28 +365,27 @@ Then leave the **Mode 4 four-habits** on screen (retype them into whatever tool 
 
 | If this happens | Do this |
 |---|---|
-| **Wifi dies** | Switch to recordings folder. Say: "This is why you always have a backup — and that's true for your presentations too." Turn it into a point. |
-| **Demo produces a boring answer** | Say so out loud. "That's a weak answer — watch what happens when I give it more to work with." Recovering visibly builds *more* trust than a clean run. |
-| **A student's clinical prompt gets refused** | Reframe as education: "I'm a medical student practising for an exam." Have this ready — it can happen with dose/diagnosis prompts in the hands-on. |
-| **Hands-on stalls the room** | Hands-on is optional and time-boxed. Announce the time, then move on regardless. Don't let 5 stuck people hold 45. |
-| **Someone challenges you on cheating** | Don't get defensive. "Fair. That's exactly why Mode 4 exists and why I told you what I did as a student." |
+| **Wifi dies** | Switch to the recordings folder. "This is why you always have a backup — true for your presentations too." Turn it into a point. |
+| **A demo produces a boring answer** | Say so out loud. "That's a weak answer — watch what happens when I give it more to work with." Recovering visibly builds *more* trust than a clean run. |
+| **A student's clinical prompt gets refused** | Reframe as education: "I'm a medical student practising for an exam." It can happen with dose/diagnosis prompts in the hands-on. |
+| **Hands-on stalls the room** | Hands-on is time-boxed. Announce the time, then move on regardless. Don't let 5 stuck people hold 45. |
+| **The agent/build runs long or errors** | Keep it small — one clean feature. If it breaks live, switch to recording `07`. Never let the finale die on screen. |
+| **Someone challenges you on cheating** | Don't get defensive. "Fair. That's exactly why Verify exists, and why I told you what I did as a student." |
 | **Someone asks a deep clinical question** | "You're the doctor in this room, not me." Genuine, and it lands well. |
-| **Running late** | Cut in this order: Mode 2 hands-on → Mode 3 hands-on → Mode 1 Demo 3 → Feynman check. **Never cut the finale.** |
+| **Running late** | Cut in this order: L3 hands-on → L4 hands-on → Demo 1 of L5 (research). **Never cut the build finale.** |
 | **Running early** | Take questions on their actual subjects and demo live. Best possible use of spare time. |
 
 ---
 
 ## PART 4 — THE NIGHT-BEFORE CHECKLIST
 
-- [ ] NotebookLM notebook built with 3 sources on your example topic, tested
-- [ ] Audio Overview pre-generated (it takes minutes — do not generate live)
-- [ ] All 7 recordings (`02`–`08`) captured and in one folder
-- [ ] Mode 4 fake-citation prepared: a fabricated DOI captured (screenshot + recording `07`) and verified as fake at doi.org
-- [ ] Gem built once as a rehearsal, then deleted so you can build it live
-- [ ] Claude Code finale run once end-to-end — know how long it actually takes
-- [ ] Handwritten-notes photo + a diagram/chart image on phone
+- [ ] Sample lecture ready (or Discover-sources topic chosen) for L2/L3/L4
+- [ ] NotebookLM tested on it — cited answer + Audio Overview pre-generated (it takes minutes — don't generate live)
+- [ ] All 6 recordings captured and in one folder
+- [ ] Gem "Study Coach" built once as a rehearsal, then deleted so you can build it live
+- [ ] Claude Code finale run once end-to-end — know how long the build actually takes
+- [ ] `deck.html` tested full-screen on the projector; arrow keys advance
 - [ ] Speakers tested at hall volume
-- [ ] Phone mirroring tested
 - [ ] This guide open on your second screen / phone (NOT projected)
-- [ ] Class WhatsApp group link handy, so you can drop the prompts at the end
+- [ ] Class WhatsApp group link handy, to drop the prompts at the end
 - [ ] Every account logged in, unrelated tabs closed, notifications off
