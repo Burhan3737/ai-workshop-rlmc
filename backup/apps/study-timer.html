@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Timer — Focus &amp; Break</title>
+<style>
+/* ============================================================
+   STUDY TIMER — Pomodoro-style focus/break countdown.
+   Matches the workshop deck's "Observation Chart" language.
+   Single file, fully offline, no external assets.
+   ============================================================ */
+:root{
+  --ground:#F4F6F5; --surface:#FFFFFF; --ink:#12201F; --muted:#5C6E6B;
+  --accent:#0F5C4E; --accent-ink:#FFFFFF; --accent-soft:#E2EDE8;
+  --break:#8A6A1E; --break-soft:#F3ECD8;
+  --alarm:#A93C17; --alarm-soft:#F8E9E2;
+  --rule:#D5DDDA; --grid:rgba(15,92,78,.055);
+  --display:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --body:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Code",Consolas,"SF Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(18,32,31,.05),0 8px 26px rgba(18,32,31,.08);
+  --phase:var(--accent); --phase-soft:var(--accent-soft); --phase-ink:var(--accent-ink);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#0B1211; --surface:#111C1A; --ink:#E9F0ED; --muted:#90A49F;
+    --accent:#46BFA0; --accent-ink:#06110E; --accent-soft:#15302A;
+    --break:#D8B75A; --break-soft:#2A2415;
+    --alarm:#E8814F; --alarm-soft:#31201A;
+    --rule:#23342F; --grid:rgba(70,191,160,.062);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1211; --surface:#111C1A; --ink:#E9F0ED; --muted:#90A49F;
+  --accent:#46BFA0; --accent-ink:#06110E; --accent-soft:#15302A;
+  --break:#D8B75A; --break-soft:#2A2415;
+  --alarm:#E8814F; --alarm-soft:#31201A;
+  --rule:#23342F; --grid:rgba(70,191,160,.062);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --ground:#F4F6F5; --surface:#FFFFFF; --ink:#12201F; --muted:#5C6E6B;
+  --accent:#0F5C4E; --accent-ink:#FFFFFF; --accent-soft:#E2EDE8;
+  --break:#8A6A1E; --break-soft:#F3ECD8;
+  --alarm:#A93C17; --alarm-soft:#F8E9E2;
+  --rule:#D5DDDA; --grid:rgba(15,92,78,.055);
+  --shadow:0 1px 2px rgba(18,32,31,.05),0 8px 26px rgba(18,32,31,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background-color:var(--ground);
+  background-image:
+    repeating-linear-gradient(to right,var(--grid) 0 1px,transparent 1px 34px),
+    repeating-linear-gradient(to bottom,var(--grid) 0 1px,transparent 1px 34px);
+  color:var(--ink); font-family:var(--body); line-height:1.5;
+  -webkit-font-smoothing:antialiased; min-height:100vh; display:flex; flex-direction:column;
+}
+.wrap{width:100%; max-width:720px; margin:0 auto; padding:clamp(1rem,3vw,2rem) clamp(1rem,4vw,2.4rem) 3rem; flex:1 1 auto; display:flex; flex-direction:column;}
+.rail{display:flex; align-items:baseline; justify-content:space-between; gap:1rem; padding-bottom:.6rem; border-bottom:1px solid var(--rule); flex-wrap:wrap;}
+.eyebrow{font-family:var(--mono); font-size:clamp(.66rem,.5rem+.28vw,.8rem); letter-spacing:.17em; text-transform:uppercase; color:var(--accent); font-weight:600;}
+.themebtn{font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); background:transparent; border:1px solid var(--rule); border-radius:999px; padding:.32rem .7rem; cursor:pointer;}
+.themebtn:hover{border-color:var(--accent); color:var(--accent);}
+
+h1{font-family:var(--display); font-weight:600; font-size:clamp(1.8rem,1.3rem+2.4vw,2.7rem); line-height:1.05; margin:1.3rem 0 .3rem;}
+.lede{color:var(--muted); max-width:52ch; margin-bottom:1.6rem;}
+
+/* phase badge */
+.phase-badge{display:inline-flex; align-items:center; gap:.5rem; font-family:var(--mono); font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--phase); background:var(--phase-soft); padding:.4rem .9rem; border-radius:999px; transition:color .3s, background .3s;}
+.phase-dot{width:9px; height:9px; border-radius:50%; background:var(--phase);}
+.phase-dot.pulse{animation:pulse 1.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1; transform:scale(1);}50%{opacity:.35; transform:scale(.8);}}
+
+/* the dial */
+.dial-panel{background:var(--surface); border:1px solid var(--rule); border-radius:20px; box-shadow:var(--shadow); padding:clamp(1.4rem,5vw,2.6rem); margin-top:1.2rem; text-align:center;}
+.dial{position:relative; width:min(74vw,340px); height:min(74vw,340px); margin:.4rem auto 1.2rem;}
+.dial svg{width:100%; height:100%; transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--phase-soft); stroke-width:12;}
+.ring-fg{fill:none; stroke:var(--phase); stroke-width:12; stroke-linecap:round; transition:stroke-dashoffset .95s linear, stroke .3s;}
+.dial-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.time{font-family:var(--mono); font-weight:600; font-variant-numeric:tabular-nums; font-size:clamp(3rem,1.6rem+11vw,5.2rem); line-height:1; letter-spacing:.01em; color:var(--ink);}
+.time.warn{color:var(--alarm);}
+.phase-name{font-family:var(--display); font-style:italic; font-size:clamp(1.1rem,.9rem+1vw,1.5rem); color:var(--phase); margin-top:.4rem; transition:color .3s;}
+.sub-note{font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; color:var(--muted); margin-top:.5rem;}
+
+/* controls */
+.controls{display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap; margin-top:.4rem;}
+.btn{font-family:var(--body); font-weight:600; font-size:1.05rem; border:1.5px solid transparent; border-radius:12px; padding:.85rem 1.6rem; cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; transition:transform .08s, filter .15s, border-color .15s, background .15s;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--phase); color:var(--phase-ink);}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent; color:var(--ink); border-color:var(--rule);}
+.btn-ghost:hover{border-color:var(--phase); color:var(--phase);}
+.btn-sm{font-size:.9rem; padding:.6rem 1rem;}
+
+/* settings */
+.settings{background:var(--surface); border:1px solid var(--rule); border-radius:16px; box-shadow:var(--shadow); padding:clamp(1.1rem,3vw,1.6rem); margin-top:1.3rem;}
+.section-label{font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;}
+.set-grid{display:grid; grid-template-columns:1fr 1fr; gap:1.1rem;}
+@media (max-width:520px){.set-grid{grid-template-columns:1fr;}}
+.stepper{display:flex; flex-direction:column; gap:.5rem;}
+.stepper .cap{font-size:.82rem; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:.4rem;}
+.stepper .cap .sw{width:11px;height:11px;border-radius:3px;display:inline-block;}
+.step-row{display:flex; align-items:stretch; border:1.5px solid var(--rule); border-radius:12px; overflow:hidden; background:var(--ground);}
+.step-row button{flex:0 0 auto; width:52px; font-size:1.4rem; font-weight:600; background:transparent; border:none; color:var(--ink); cursor:pointer;}
+.step-row button:hover{background:var(--accent-soft); color:var(--accent);}
+.step-row .val{flex:1 1 auto; text-align:center; font-family:var(--mono); font-size:1.5rem; font-weight:600; align-self:center; font-variant-numeric:tabular-nums;}
+.step-row .val small{font-size:.7rem; color:var(--muted); font-weight:400; letter-spacing:.08em; display:block; margin-top:-.2rem;}
+
+/* stats */
+.stats{display:flex; gap:1rem; margin-top:1.3rem;}
+.stat{flex:1; background:var(--surface); border:1px solid var(--rule); border-radius:14px; box-shadow:var(--shadow); padding:1.1rem; text-align:center;}
+.stat .n{font-family:var(--display); font-size:2.4rem; line-height:1; color:var(--accent);}
+.stat .l{font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:.5rem;}
+.dots{display:flex; gap:.35rem; justify-content:center; flex-wrap:wrap; margin-top:.7rem;}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--accent);opacity:.9;}
+.footer{margin-top:auto; padding-top:2rem; text-align:center; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--muted);}
+.hint{font-family:var(--mono); font-size:.7rem; color:var(--muted); text-align:center; margin-top:.9rem; letter-spacing:.05em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="rail">
+    <span class="eyebrow">Study Timer · Focus &amp; Break</span>
+    <button class="themebtn" id="themeBtn" type="button">◐ Theme</button>
+  </div>
+
+  <h1>Work in focused sprints.</h1>
+  <p class="lede">Set a focus length and a break length. The clock counts down, then switches on its own — focus, break, focus, break — and tallies the focus sessions you finish today.</p>
+
+  <div class="dial-panel">
+    <span class="phase-badge" id="phaseBadge"><span class="phase-dot" id="phaseDot"></span><span id="phaseBadgeText">Focus</span></span>
+    <div class="dial">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <circle class="ring-bg" cx="120" cy="120" r="108"></circle>
+        <circle class="ring-fg" id="ringFg" cx="120" cy="120" r="108"></circle>
+      </svg>
+      <div class="dial-center">
+        <div class="time" id="timeText">25:00</div>
+        <div class="phase-name" id="phaseName">Ready to focus</div>
+        <div class="sub-note" id="subNote">press start</div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn btn-primary" id="startPauseBtn">▶ Start</button>
+      <button class="btn btn-ghost" id="resetBtn">↺ Reset</button>
+      <button class="btn btn-ghost btn-sm" id="skipBtn">Skip ⤳</button>
+    </div>
+    <p class="hint">Tip: press <b>Space</b> to start / pause.</p>
+  </div>
+
+  <div class="settings">
+    <div class="section-label">Session lengths</div>
+    <div class="set-grid">
+      <div class="stepper">
+        <span class="cap"><span class="sw" style="background:var(--accent)"></span>Focus length</span>
+        <div class="step-row">
+          <button type="button" data-act="focus-minus" aria-label="Decrease focus">−</button>
+          <div class="val"><span id="focusVal">25</span><small>minutes</small></div>
+          <button type="button" data-act="focus-plus" aria-label="Increase focus">+</button>
+        </div>
+      </div>
+      <div class="stepper">
+        <span class="cap"><span class="sw" style="background:var(--break)"></span>Break length</span>
+        <div class="step-row">
+          <button type="button" data-act="break-minus" aria-label="Decrease break">−</button>
+          <div class="val"><span id="breakVal">5</span><small>minutes</small></div>
+          <button type="button" data-act="break-plus" aria-label="Increase break">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="n" id="doneCount">0</div>
+      <div class="l">Focus sessions today</div>
+      <div class="dots" id="doneDots"></div>
+    </div>
+    <div class="stat">
+      <div class="n" id="focusTotal">0<small style="font-size:1rem;color:var(--muted)">m</small></div>
+      <div class="l">Time focused today</div>
+    </div>
+  </div>
+
+  <div class="footer">STUDY TIMER · workshop backup build · works offline</div>
+</div>
+
+<script>
+"use strict";
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  // ---------- theme ----------
+  $("themeBtn").addEventListener("click",function(){
+    var root=document.documentElement, cur=root.getAttribute("data-theme");
+    if(!cur){ cur = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"; }
+    root.setAttribute("data-theme", cur==="dark"?"light":"dark");
+  });
+
+  // ---------- state ----------
+  var focusMin=25, breakMin=5;
+  var phase="focus";            // "focus" | "break"
+  var remaining=focusMin*60;    // seconds
+  var total=focusMin*60;
+  var running=false;
+  var tickHandle=null;
+  var endAt=0;                  // timestamp for drift-free countdown
+  var completedFocus=0;
+  var focusSecondsDone=0;
+
+  var R=108, CIRC=2*Math.PI*R;
+  $("ringFg").style.strokeDasharray=CIRC;
+  $("ringFg").style.strokeDashoffset=0;
+
+  // ---------- rendering ----------
+  function fmt(sec){
+    sec=Math.max(0,Math.round(sec));
+    var m=Math.floor(sec/60), s=sec%60;
+    return (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+  }
+  function setPhaseVars(){
+    var root=document.documentElement.style;
+    if(phase==="focus"){
+      root.setProperty("--phase","var(--accent)");
+      root.setProperty("--phase-soft","var(--accent-soft)");
+      root.setProperty("--phase-ink","var(--accent-ink)");
+    } else {
+      root.setProperty("--phase","var(--break)");
+      root.setProperty("--phase-soft","var(--break-soft)");
+      root.setProperty("--phase-ink","#FFFFFF");
+    }
+  }
+  function render(){
+    $("timeText").textContent=fmt(remaining);
+    var frac = total>0 ? (remaining/total) : 0;
+    $("ringFg").style.strokeDashoffset = CIRC*(1-frac);
+    $("timeText").classList.toggle("warn", running && remaining<=10 && phase==="focus");
+    $("phaseBadgeText").textContent = phase==="focus"?"Focus":"Break";
+    $("phaseName").textContent = phase==="focus" ? (running?"Focusing":"Ready to focus") : (running?"On a break":"Break time");
+    if(!running && remaining===total){ $("subNote").textContent="press start"; }
+    else if(running){ $("subNote").textContent="counting down…"; }
+    else { $("subNote").textContent="paused"; }
+    $("phaseDot").classList.toggle("pulse", running);
+    setPhaseVars();
+    $("doneCount").textContent=completedFocus;
+    $("focusTotal").innerHTML=Math.round(focusSecondsDone/60)+'<small style="font-size:1rem;color:var(--muted)">m</small>';
+    renderDots();
+  }
+  function renderDots(){
+    var box=$("doneDots"); box.innerHTML="";
+    var n=Math.min(completedFocus,12);
+    for(var i=0;i<n;i++){ box.appendChild(document.createElement("i")); }
+    if(completedFocus>12){
+      var more=document.createElement("span");
+      more.style.cssText="font-family:var(--mono);font-size:.7rem;color:var(--muted);align-self:center;";
+      more.textContent="+"+(completedFocus-12); box.appendChild(more);
+    }
+  }
+
+  // ---------- beep (WebAudio, no assets) ----------
+  var audioCtx=null;
+  function beep(kind){
+    try{
+      if(!audioCtx){ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; audioCtx=new AC(); }
+      if(audioCtx.state==="suspended"){ audioCtx.resume(); }
+      var seq = kind==="focus" ? [660,880] : [520,392]; // rising for focus, falling for break
+      seq.forEach(function(f,i){
+        var o=audioCtx.createOscillator(), g=audioCtx.createGain();
+        var t=audioCtx.currentTime + i*0.18;
+        o.type="sine"; o.frequency.value=f;
+        g.gain.setValueAtTime(0.0001,t);
+        g.gain.exponentialRampToValueAtTime(0.25,t+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001,t+0.32);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(t); o.stop(t+0.34);
+      });
+    }catch(e){/* silent */}
+  }
+
+  // ---------- timer engine (drift-free) ----------
+  function start(){
+    if(running) return;
+    if(remaining<=0){ remaining=total; }
+    running=true;
+    endAt=Date.now()+remaining*1000;
+    $("startPauseBtn").innerHTML="❙❙ Pause";
+    if(audioCtx && audioCtx.state==="suspended"){ audioCtx.resume(); }
+    tickHandle=setInterval(tick,250);
+    render();
+  }
+  function pause(){
+    if(!running) return;
+    running=false;
+    clearInterval(tickHandle); tickHandle=null;
+    remaining=Math.max(0,(endAt-Date.now())/1000);
+    $("startPauseBtn").innerHTML="▶ Resume";
+    render();
+  }
+  function tick(){
+    remaining=(endAt-Date.now())/1000;
+    if(remaining<=0){
+      remaining=0; render();
+      completePhase();
+      return;
+    }
+    render();
+  }
+  function completePhase(){
+    clearInterval(tickHandle); tickHandle=null;
+    if(phase==="focus"){
+      completedFocus++;
+      focusSecondsDone += focusMin*60;
+      beep("break");
+      switchTo("break");
+    } else {
+      beep("focus");
+      switchTo("focus");
+    }
+    // auto-continue into the next phase
+    running=false;
+    start();
+  }
+  function switchTo(next){
+    phase=next;
+    total = (phase==="focus"?focusMin:breakMin)*60;
+    remaining=total;
+    setPhaseVars();
+  }
+
+  function reset(){
+    running=false;
+    if(tickHandle){ clearInterval(tickHandle); tickHandle=null; }
+    phase="focus";
+    total=focusMin*60; remaining=total;
+    $("startPauseBtn").innerHTML="▶ Start";
+    render();
+  }
+  function skip(){
+    // jump to end of current phase
+    if(tickHandle){ clearInterval(tickHandle); tickHandle=null; }
+    var wasRunning=running;
+    if(phase==="focus"){ completedFocus++; focusSecondsDone+=Math.round((total-remaining)); }
+    // note: skipping focus still counts the session as done, credited with elapsed time
+    beep(phase==="focus"?"break":"focus");
+    switchTo(phase==="focus"?"break":"focus");
+    running=false;
+    if(wasRunning){ start(); } else { $("startPauseBtn").innerHTML="▶ Start"; render(); }
+  }
+
+  // ---------- controls ----------
+  $("startPauseBtn").addEventListener("click",function(){ running?pause():start(); });
+  $("resetBtn").addEventListener("click",reset);
+  $("skipBtn").addEventListener("click",skip);
+
+  document.addEventListener("keydown",function(e){
+    if(e.target && (e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA")) return;
+    if(e.key===" "){ e.preventDefault(); running?pause():start(); }
+  });
+
+  // ---------- steppers ----------
+  function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+  function applyLengths(){
+    $("focusVal").textContent=focusMin;
+    $("breakVal").textContent=breakMin;
+    if(!running){
+      total=(phase==="focus"?focusMin:breakMin)*60;
+      remaining=total;
+      render();
+    }
+  }
+  document.querySelectorAll(".step-row button").forEach(function(b){
+    b.addEventListener("click",function(){
+      var act=b.getAttribute("data-act");
+      if(act==="focus-minus"){ focusMin=clamp(focusMin-1,1,120); }
+      else if(act==="focus-plus"){ focusMin=clamp(focusMin+1,1,120); }
+      else if(act==="break-minus"){ breakMin=clamp(breakMin-1,1,60); }
+      else if(act==="break-plus"){ breakMin=clamp(breakMin+1,1,60); }
+      applyLengths();
+    });
+  });
+
+  // ---------- init ----------
+  setPhaseVars();
+  applyLengths();
+  render();
+})();
+</script>
+</body>
+</html>

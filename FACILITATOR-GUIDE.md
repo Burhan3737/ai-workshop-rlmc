@@ -14,6 +14,22 @@ Duration: ~2 hr 40 min (incl. 10 min break) · Audience: 20–50 MBBS students, 
 
 ---
 
+## Learning Outcomes
+
+By the end of this workshop, students will be able to:
+
+1. **Explain, in plain terms, how an AI language model works** — that it predicts the next word rather than "knowing" facts — and why that means its answers must be checked, not trusted blindly. *(Opening)*
+2. **Write effective prompts** using a clear structure — Role · Context · Task · Format — to get useful, accurate responses. *(Level 1 — Prompt it)*
+3. **Ground AI in their own study material** so answers are drawn from, and cited to, their real notes rather than the model's memory. *(Level 2 — Ground it)*
+4. **Use AI to test themselves** on their own material through active recall, instead of only asking it for answers. *(Level 3 — Flip it)*
+5. **Build a reusable AI "skill"** — custom instructions and a saved tutor — that supports them across the whole semester. *(Level 4 — Automate it)*
+6. **Critically evaluate and verify AI output**, applying simple habits to catch errors before trusting anything — especially in a clinical context. *(Verify)*
+7. **Describe what AI agents can do** — research, write, and build — and delegate a task to one while staying in control. *(Level 5 — Delegate it)*
+
+> **The one-line version:** students leave able to use AI as a *co-pilot* for their studies — prompt it well, ground it in their notes, be tested by it, automate it, verify it, and delegate to it — without ever handing over the controls.
+
+---
+
 ## PART 1 — PREP
 
 ### A. Accounts you need (all free unless noted)
@@ -42,8 +58,8 @@ Duration: ~2 hr 40 min (incl. 10 min break) · Audience: 20–50 MBBS students, 
 
 *All on one neutral academic topic you're comfortable with. Students bring their own real course material for the hands-on parts; you don't need any of it.*
 
-1. **A sample lecture slide or short PDF** on a neutral topic — photosynthesis, the water cycle, anything school-level. *(L2 grounding demo + L3 quiz demo + L4 Gem demo — this stands in for "your lecture".)*
-   - *Easiest source:* in NotebookLM just click **Discover sources**, type the topic, and add what it finds — no file needed. Or paste a Wikipedia URL / YouTube link.
+1. **A sample lecture on photosynthesis** — a slide or short PDF. It carries straight over from the Level 1 prompt example, so your whole demo runs on one topic the room can follow. *(L2 grounding demo + L3 quiz demo + L4 Gem demo — this stands in for "your lecture". Swap for another school-level topic — the water cycle, the solar system — if you prefer.)*
+   - *Easiest source:* in NotebookLM just click **Discover sources**, type "photosynthesis", and add what it finds — no file needed. Or paste a Wikipedia URL / YouTube link.
 2. **A photo of any diagram or figure** you can talk about (a graph, a labelled diagram). *(Optional multimodal moment in L2/L4.)*
 
 That's it. L1 is typed live; L5 is built live.
@@ -56,10 +72,9 @@ Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record 
 - [ ] `02` — NotebookLM Audio Overview playing (L2)
 - [ ] `03` — the "quiz me" exchange (L3)
 - [ ] `04` — a Gem / "Study Coach" being built and used (L4)
-- [ ] `05` — an agent researching + writing a summary (L5)
-- [ ] `06` — **Claude Code building the study app, start to finish** (L5)
+- [ ] `05` — **the end-to-end finale: the agent researching, then building the presentation, start to finish** (L5)
 
-`06` is the most important recording you'll make. If the finale fails live, the closing moment fails with it.
+`05` is the most important recording you'll make. If the finale fails live, the closing moment fails with it.
 
 ### E. Room setup
 
@@ -81,25 +96,32 @@ Wifi in a lecture hall is not a dependency you bet a workshop on. Screen-record 
 
 ### `00:00–00:12` — OPENING: the honest start + how it actually works
 
-**Two questions, hands up. Warms the room and sets up the whole day.**
+**Two open questions. Take a few answers out loud — don't correct anyone.**
 
-> "Hands up if you've used AI this week."
-> *(every hand)*
-> "Keep it up if you used it for something that wasn't an assignment, a summary, or 'explain this topic to me.'"
-> *(almost every hand drops — let the silence sit)*
-> "That gap is the entire workshop."
+> "Before I show you anything — in your own words, what actually *is* AI?"
+> *(take 3–4 answers — "a robot", "a computer brain", "ChatGPT", "it knows everything" — collect them, don't judge)*
+> "And how do you actually use it, day to day?"
+> *(assignments, summaries, "explain this topic" — that's the baseline you're about to widen)*
+
+> "Hold those answers. In ten minutes you'll know which of you were right."
 
 **Your story — this is what buys you the room:**
 
 > "I'm a software engineer. As a student I used AI to finish assignments. That's all. I found out later I was using maybe 5% of it. Before I show you the rest — a quick game, because you can't use this thing well until you know what it actually is."
 
-**The next-word game (no tools, no wifi — runs on the room).** Say a stem, cut yourself off, let them shout the next word:
+**The next-word game (no tools, no wifi — runs on the room). Don't say the answer — cut the stem off and let the room shout it.**
 
-> "Twinkle, twinkle, little…" → *STAR*
-> "Better late than…" → *never*
-> "Salt and…" → *pepper*
+*Round 1 — the obvious one (everyone lands on the same word):*
+> "Salt and…"
 
-> "Nobody looked anything up. You just knew what usually comes next. **That is exactly what an AI does** — it read most of the internet, and all it learned was: given the words so far, what word probably comes next. Then it does it again, faster than you can read. There's no fact-box inside it. It's the most powerful autocomplete ever built."
+*Round 2 — a fork (different people, different words):*
+> "I walked into the kitchen and picked up the…" *(kettle, cup, knife, phone, spoon)*
+
+*Round 3 — build a whole sentence, one word each:*
+> "This morning, on my way here, I…"
+> Now **point at person after person around the room** — each adds **only the next word.** A full sentence appears out of nowhere, one word at a time. Let it run a good 6–8 people; the longer it goes, the better it lands.
+
+> "That's the reveal. Nobody planned that sentence — each of you just added the most likely next word. **That is exactly what an AI does** — it read most of the internet and learned, given the words so far, what word probably comes next. Then it does it again, one word at a time, faster than you can read. There's no fact-box inside it — it's the most powerful autocomplete ever built."
 
 **Land the two consequences:**
 
@@ -156,29 +178,23 @@ FORMAT  — the shape to hand back ("5 steps, under 200 words, no jargon")
 
 **Go to:** notebooklm.google.com
 
-**Demo 1 — feed it real material (5 min).** Add your sample lecture (Discover sources → your topic, or upload the slide). Then ask:
+**Demo 1 — feed it real material (5 min).** Add your photosynthesis lecture — fastest is NotebookLM's **Discover sources → "photosynthesis"**, or upload a slide. Then ask:
 
 ```
-Using only my sources, give me a one-page high-yield summary of
-this lecture. Cite the slide or page number for every point.
+You are my study tutor (ROLE). Using only the sources I gave you
+(CONTEXT), write a one-page high-yield summary of this lecture (TASK).
+Cite the slide or page number for every point (FORMAT).
 ```
 
 Click a citation. It jumps to the exact spot. **Say the line:**
 > "It's not remembering. It's reading your material — and showing you where it got every line. That's the difference between a co-pilot and a party trick."
 
-**Demo 2 — the refusal (3 min).** Ask something deliberately outside the sources:
+**Demo 2 — Audio Overview (7 min).** Generate it, then **play it out loud**:
 
 ```
-What do my notes say about the French Revolution?
-```
-
-> "It just said 'that's not in your sources.' Your normal chatbot almost never does that. That honesty is the whole point of grounding."
-
-**Demo 3 — Audio Overview (7 min).** Generate it, then **play it out loud**:
-
-```
-Focus on this lecture. Explain it at the level of a student
-revising for an exam. Emphasise the points most likely to be tested.
+You're briefing a student revising for an exam (ROLE). Focus on
+this lecture (CONTEXT). Cover the points most likely to be tested
+(TASK), kept simple and high-yield (FORMAT).
 ```
 
 > "Two AI hosts discussing your own lecture. That's your commute. That's the queue at the canteen. Your lecture deck is now a podcast."
@@ -197,18 +213,23 @@ revising for an exam. Emphasise the points most likely to be tested.
 **Demo — the examiner (8 min).** Keep the same lecture material in play (Gemini with the slide attached, or your NotebookLM notebook):
 
 ```
-Quiz me on this lecture. One question at a time — wait for my
-answer, never give it to me. If I'm vague, probe deeper. Escalate
-as I do well. After 8 questions, score me out of 10 and tell me
-the two things I need to revise tonight.
+You are a tough examiner (ROLE). Examine me on this lecture (CONTEXT).
+Ask one question at a time, wait for my answer, never give it to me,
+and probe deeper if I'm vague (TASK). After 8 questions, score me out
+of 10 and name the two things to revise tonight (FORMAT).
 ```
 
 Answer a couple wrong on purpose — the probing is the wow. **Then the meta-punchline:**
 > "Notice what just happened — it *tested* me instead of *telling* me. Testing yourself is the single best-evidenced way to make something stick. You just learned the technique by having it done to you."
 
+**Point at the labels in the prompt:**
+> "And look at what that examiner actually is — a good prompt. Role, Context, Task, Format — the exact four parts from Level 1, reused. That's the whole trick."
+
 *(Optional voice: run the same thing through Gemini Live on your phone — "quiz me out loud" — for hands-free revision.)*
 
-**HANDS-ON (5 min).** Pairs. One person has the AI run a **3-minute quiz** on a topic from their own course. The other watches how hard it pushes.
+*(One-click, grounded alternative: **NotebookLM → Studio → Quiz** generates a quiz straight from the lecture uploaded in Level 2 — exactly like the Audio Overview, no prompt needed. Use the Gemini prompt above to teach that "the examiner is just a good prompt"; point students to NotebookLM's Quiz for the fastest hands-on.)*
+
+**HANDS-ON (5 min).** Everyone, on their own: run a **3-minute quiz** on a topic from your own course — either type "quiz me" in **Gemini**, or (easiest, and grounded) open the lecture you uploaded in Level 2 and hit **NotebookLM → Studio → Quiz** to generate one straight from your own material. See how hard it pushes.
 
 **Fallback:** recording `03`.
 
@@ -229,15 +250,14 @@ Ten minutes. Walk the room, answer questions, and find out what people are study
 Claude → Settings → Profile · Gemini → Settings → Saved info · ChatGPT → Settings → Personalization
 
 ```
-I'm a university student preparing for exams.
+I'm a university student preparing for exams (CONTEXT).
+Act as my study tutor (ROLE).
 
-When you answer me:
-- Explain in clear, simple steps.
-- Structure answers as: definition → key points → example →
-  common mistakes.
-- Tell me how confident you are, and what I should double-check
-  in a trusted source.
-- If something is region- or context-specific, flag it.
+When you answer: explain in clear simple steps, tell me your
+confidence, and flag anything I should double-check or that's
+region-specific (TASK).
+Structure every answer as: definition → key points → example →
+common mistakes (FORMAT).
 ```
 
 > "You write that once. It applies to every conversation from now on. Most people never open this screen."
@@ -249,24 +269,23 @@ When you answer me:
 Name: `Study Coach`
 
 ```
-You are my study tutor. My lecture notes are in your files.
-
-Always:
-- Answer from my uploaded material where possible; say clearly
-  when you're going beyond it.
-- End every answer with one follow-up question to check I understood.
-
-If I say "QUIZ ME", stop teaching and examine me instead: one
-question at a time, no answers given, 8 questions, then score me.
+You are my study tutor (ROLE). My lecture notes are in your files
+(CONTEXT). Teach from my material and end every answer with one
+follow-up question to check I understood (TASK).
+If I say "QUIZ ME", examine me instead: one question at a time, no
+answers, 8 questions, then score me (FORMAT).
 ```
 
 Use it, then **close it and reopen it** — show that it remembered everything.
 
 > "That's a tutor that knows your material and your exam format, and it's still there in March. **This — a saved, reusable assistant you build once — is what people mean by giving an AI a 'skill'.** You'll hear about 'custom GPTs' and 'Claude Skills'; same idea, but creating those needs a paid plan. Gemini Gems does it for free. So this is the one you build tonight."
 
+**Point at the labels in the prompt:**
+> "And notice — the skill is just a good prompt you saved. Role, Context, Task, Format — the same four parts from Level 1. You already know how to write these."
+
 *Mention only:* Claude Projects does the same (free, 5 projects). Claude Skills and custom GPTs are **paid to create**.
 
-**HANDS-ON (5 min).** Set custom instructions (everyone) — with their own subject and exam — then build one Gem on their own lecture if there's time.
+**HANDS-ON (5 min).** Everyone does **both**: (1) set your custom instructions — with your own subject and exam; (2) build one Gem loaded with your own lecture.
 
 **Fallback:** recording `04`.
 
@@ -306,36 +325,28 @@ Plus the hard rule: **never accept a number — a dose, a date, a statistic — 
 
 *This is a demo you drive. Real agents are the paid/advanced tier — but they show students where all of this is going, and the free build tools let them try the idea tonight.*
 
-**Show its power — build to the climax:**
-
-**Demo 1 — it researches and writes (5 min).** In Claude Code (or ChatGPT agent mode if you have it), give it a goal:
+**The end-to-end finale — one goal, done live (18 min).** This single prompt pulls together *everything from today* — a good prompt (Role·Context·Task·Format), grounded in real, cited sources, producing a finished thing you keep. In **Claude Code**:
 
 ```
-Research the main study techniques proven to improve exam
-performance, and write me a one-page summary with sources.
+You are my research assistant and presentation designer (ROLE).
+I'm a medical student who wants an evidence-based guide to studying
+smarter for exams (CONTEXT).
+Research the study techniques proven to work — active recall, spaced
+repetition, interleaving — from credible sources and cite them, then
+turn it into a clean slide presentation (TASK).
+Make it a single self-contained HTML deck: 6–8 slides, one idea each,
+a sources slide at the end, works offline (FORMAT).
 ```
 
-Narrate as it works: *"Watch — it's breaking the goal into steps, gathering, then writing. I'm not doing any of it."*
+Narrate as it works — this is the whole workshop in one run: *"Watch what it's doing: first it researches, finds and cites real sources, then it designs and writes an entire presentation — one step at a time, and I approve each one. I'm not doing any of it."* When it finishes, **open the presentation on screen.** Wait for the noise — they're watching an AI build a presentation, live, *during* a presentation.
 
-**Demo 2 — it builds software, live (12 min).** This is the finale. In **Claude Code**, describe a study tool and let it build in front of the room:
-
-```
-Build a single-page web app: a flashcard quiz trainer. Let me type
-in question/answer pairs. It quizzes me one at a time, hides the
-answer until I click, tracks my score, and at the end re-shows only
-the ones I got wrong. Clean, mobile-friendly, works offline in a
-single file.
-```
-
-Narrate as it plans, writes files, and runs. **Then open it on your phone.** Wait for the noise.
-
-> "That's an agent. It took a goal and *did* it — planned, wrote the code, ran it, fixed its own mistakes. And notice: it showed me each step and I approved. **Even at full power, it's a co-pilot, not the pilot.** That's the whole idea of today."
+> "That's an agent. One prompt — a good prompt, grounded in sources — and it did the whole job end to end: research to finished deck, showing me every step. That is where all five levels have been heading. And even here, at full power, you stay in charge — you approve each move."
 
 **The honest bridge — do not skip:**
 
-> "Claude Code is the paid tool I use for real work. But the *idea* — describe what you want, get working software — is free tonight: **Claude Artifacts, Gemini Canvas.** And here's the thing: someone who has never opened your syllabus just built you a study tool in four minutes. You know exactly what you need. That's the part I can't do — but now you can."
+> "Claude Code is the paid tool I use for real work. But the *idea* — describe what you want and get it built — is free tonight: **Claude Artifacts, Gemini Canvas.** You've now seen the whole ladder: prompt it well, ground it in real sources, make it reusable, keep your hands on the controls, and hand the whole job to an agent."
 
-**Fallback:** recordings `05`, `06`. **Never skip the finale — play the recording instead.**
+**Fallback:** recording `05` (the end-to-end run). **Never skip the finale — play the recording instead.**
 
 ---
 
@@ -381,7 +392,7 @@ Leave the **four habits** on screen long enough for the room to photograph them.
 
 - [ ] Sample lecture ready (or Discover-sources topic chosen) for L2/L3/L4
 - [ ] NotebookLM tested on it — cited answer + Audio Overview pre-generated (it takes minutes — don't generate live)
-- [ ] All 6 recordings captured and in one folder
+- [ ] All 5 recordings captured and in one folder
 - [ ] Gem "Study Coach" built once as a rehearsal, then deleted so you can build it live
 - [ ] Claude Code finale run once end-to-end — know how long the build actually takes
 - [ ] `deck.html` tested full-screen on the projector; arrow keys advance

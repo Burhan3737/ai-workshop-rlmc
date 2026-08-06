@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image-Label Quiz — Name That Picture</title>
+<style>
+/* ============================================================
+   IMAGE-LABEL QUIZ — upload images, label them, get quizzed
+   one at a time on a 30s timer. Matches the workshop deck's
+   "Observation Chart" language. Single file, fully offline.
+   ============================================================ */
+:root{
+  --ground:#F4F6F5; --surface:#FFFFFF; --ink:#12201F; --muted:#5C6E6B;
+  --accent:#0F5C4E; --accent-ink:#FFFFFF; --accent-soft:#E2EDE8;
+  --alarm:#A93C17; --alarm-soft:#F8E9E2;
+  --rule:#D5DDDA; --grid:rgba(15,92,78,.055);
+  --display:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --body:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Code",Consolas,"SF Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(18,32,31,.05),0 8px 26px rgba(18,32,31,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#0B1211; --surface:#111C1A; --ink:#E9F0ED; --muted:#90A49F;
+    --accent:#46BFA0; --accent-ink:#06110E; --accent-soft:#15302A;
+    --alarm:#E8814F; --alarm-soft:#31201A;
+    --rule:#23342F; --grid:rgba(70,191,160,.062);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1211; --surface:#111C1A; --ink:#E9F0ED; --muted:#90A49F;
+  --accent:#46BFA0; --accent-ink:#06110E; --accent-soft:#15302A;
+  --alarm:#E8814F; --alarm-soft:#31201A;
+  --rule:#23342F; --grid:rgba(70,191,160,.062);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --ground:#F4F6F5; --surface:#FFFFFF; --ink:#12201F; --muted:#5C6E6B;
+  --accent:#0F5C4E; --accent-ink:#FFFFFF; --accent-soft:#E2EDE8;
+  --alarm:#A93C17; --alarm-soft:#F8E9E2;
+  --rule:#D5DDDA; --grid:rgba(15,92,78,.055);
+  --shadow:0 1px 2px rgba(18,32,31,.05),0 8px 26px rgba(18,32,31,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background-color:var(--ground);
+  background-image:
+    repeating-linear-gradient(to right,var(--grid) 0 1px,transparent 1px 34px),
+    repeating-linear-gradient(to bottom,var(--grid) 0 1px,transparent 1px 34px);
+  color:var(--ink); font-family:var(--body); line-height:1.55;
+  -webkit-font-smoothing:antialiased; min-height:100vh; display:flex; flex-direction:column;
+}
+.wrap{width:100%; max-width:820px; margin:0 auto; padding:clamp(1rem,3vw,2rem) clamp(1rem,4vw,2.4rem) 3rem; flex:1 1 auto; display:flex; flex-direction:column;}
+.rail{display:flex; align-items:baseline; justify-content:space-between; gap:1rem; padding-bottom:.6rem; border-bottom:1px solid var(--rule); flex-wrap:wrap;}
+.eyebrow{font-family:var(--mono); font-size:clamp(.66rem,.5rem+.28vw,.8rem); letter-spacing:.17em; text-transform:uppercase; color:var(--accent); font-weight:600;}
+.stamp{font-family:var(--mono); font-size:.72rem; color:var(--muted); letter-spacing:.08em;}
+.themebtn{font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); background:transparent; border:1px solid var(--rule); border-radius:999px; padding:.32rem .7rem; cursor:pointer;}
+.themebtn:hover{border-color:var(--accent); color:var(--accent);}
+
+h1{font-family:var(--display); font-weight:600; font-size:clamp(1.9rem,1.3rem+2.5vw,2.9rem); line-height:1.05; margin:1.3rem 0 .3rem;}
+h1 em{color:var(--accent); font-style:italic;}
+.lede{color:var(--muted); max-width:56ch; margin-bottom:1.6rem;}
+
+.panel{background:var(--surface); border:1px solid var(--rule); border-radius:16px; box-shadow:var(--shadow); padding:clamp(1.1rem,3vw,1.8rem);}
+.section-label{font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem; display:flex; align-items:center; gap:.5rem;}
+.section-label b{color:var(--accent); font-weight:700;}
+
+/* dropzone / uploader */
+.drop{border:2px dashed var(--rule); border-radius:14px; padding:1.8rem 1.2rem; text-align:center; cursor:pointer; transition:border-color .15s, background .15s;}
+.drop:hover,.drop.over{border-color:var(--accent); background:var(--accent-soft);}
+.drop svg{width:34px;height:34px;stroke:var(--accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-bottom:.5rem;}
+.drop .big{font-weight:600; font-size:1.05rem;}
+.drop .small{color:var(--muted); font-size:.85rem; margin-top:.25rem;}
+input[type=file]{display:none;}
+
+.btn{font-family:var(--body); font-weight:600; font-size:.95rem; border:1.5px solid transparent; border-radius:10px; padding:.7rem 1.2rem; cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; transition:transform .08s, filter .15s, border-color .15s, background .15s;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--accent); color:var(--accent-ink);}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent; color:var(--ink); border-color:var(--rule);}
+.btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+.btn-big{font-size:1.1rem; padding:.9rem 1.6rem;}
+.btn[disabled]{opacity:.45; cursor:not-allowed;}
+
+/* thumb grid */
+.thumbs{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:.9rem; margin-top:1.2rem;}
+.thumb{background:var(--ground); border:1px solid var(--rule); border-radius:12px; overflow:hidden; display:flex; flex-direction:column;}
+.thumb .imgbox{aspect-ratio:4/3; background:#0000000d; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;}
+.thumb .imgbox img{width:100%; height:100%; object-fit:cover; display:block;}
+.thumb .del{position:absolute; top:.4rem; right:.4rem; width:26px;height:26px; border-radius:50%; border:none; background:rgba(18,32,31,.6); color:#fff; cursor:pointer; font-size:1rem; line-height:1; display:flex;align-items:center;justify-content:center;}
+.thumb .del:hover{background:var(--alarm);}
+.thumb .lblwrap{padding:.55rem .6rem;}
+.thumb input.lbl{width:100%; font-family:var(--body); font-size:.9rem; color:var(--ink); background:var(--surface); border:1.5px solid var(--rule); border-radius:8px; padding:.45rem .55rem;}
+.thumb input.lbl:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);}
+.thumb input.lbl.missing{border-color:var(--alarm);}
+.count-note{font-family:var(--mono); font-size:.72rem; color:var(--muted); margin-top:1rem; letter-spacing:.05em;}
+.empty{color:var(--muted); text-align:center; padding:1.6rem 1rem; font-style:italic;}
+
+.start-bar{margin-top:1.6rem; display:flex; justify-content:center; flex-direction:column; align-items:center; gap:.6rem;}
+.warn-note{font-family:var(--mono); font-size:.72rem; color:var(--alarm); letter-spacing:.05em; text-align:center;}
+
+.hide{display:none !important;}
+
+/* quiz view */
+.quiz-meta{display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:.9rem; flex-wrap:wrap;}
+.roundtag{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft); padding:.35rem .7rem; border-radius:999px; font-weight:700;}
+.score{font-family:var(--mono); font-size:.85rem; color:var(--muted);}
+.score b{color:var(--ink);}
+
+.timer-track{height:8px; background:var(--accent-soft); border-radius:999px; overflow:hidden; margin-bottom:1.2rem;}
+.timer-fill{height:100%; background:var(--accent); width:100%; border-radius:999px; transition:width 1s linear, background .3s;}
+.timer-fill.low{background:var(--alarm);}
+
+.stage{background:var(--surface); border:1px solid var(--rule); border-radius:16px; box-shadow:var(--shadow); padding:clamp(1rem,3vw,1.6rem); text-align:center;}
+.stage .imgframe{background:#00000010; border-radius:12px; overflow:hidden; max-height:46vh; display:flex; align-items:center; justify-content:center; margin-bottom:1rem;}
+.stage .imgframe img{max-width:100%; max-height:46vh; object-fit:contain; display:block;}
+.clock{font-family:var(--mono); font-weight:600; font-variant-numeric:tabular-nums; font-size:1.4rem; color:var(--accent);}
+.clock.low{color:var(--alarm);}
+.prompt-q{font-family:var(--display); font-style:italic; font-size:1.2rem; color:var(--muted); margin-bottom:1rem;}
+
+.answer-reveal{margin:.4rem 0 1rem;}
+.answer-reveal .lab{font-family:var(--mono); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:.3rem;}
+.answer-reveal .val{font-family:var(--display); font-size:clamp(1.5rem,1.1rem+2vw,2.2rem); color:var(--ink);}
+.reveal-bar{display:flex; justify-content:center;}
+.judge-bar{display:grid; grid-template-columns:1fr 1fr; gap:.8rem; margin-top:.4rem;}
+.btn-wrong{background:var(--alarm-soft); color:var(--alarm); justify-content:center;}
+.btn-wrong:hover{background:var(--alarm); color:#fff;}
+.btn-right{background:var(--accent); color:var(--accent-ink); justify-content:center;}
+.btn-right:hover{filter:brightness(1.08);}
+.timeup{font-family:var(--mono); font-size:.78rem; letter-spacing:.06em; color:var(--alarm); margin-bottom:.6rem;}
+.quiz-foot{margin-top:1.3rem; display:flex; justify-content:center;}
+.linkbtn{background:transparent; border:none; color:var(--muted); font-family:var(--mono); font-size:.75rem; letter-spacing:.08em; cursor:pointer; text-transform:uppercase;}
+.linkbtn:hover{color:var(--alarm);}
+
+/* results */
+.result-wrap{text-align:center; padding:1rem 0;}
+.result-mark{width:88px; height:88px; margin:0 auto 1.2rem; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--accent-soft);}
+.result-mark svg{width:46px; height:46px;}
+.big-score{font-family:var(--display); font-size:clamp(2.4rem,1.6rem+4vw,4rem); line-height:1; color:var(--accent); margin:.2rem 0;}
+.result-sub{color:var(--muted); max-width:46ch; margin:.4rem auto 1.4rem; font-size:1.05rem;}
+.chip{display:inline-block; font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; padding:.3rem .7rem; border-radius:999px; background:var(--ground); border:1px solid var(--rule); color:var(--muted); margin:.2rem;}
+.result-actions{display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; margin-top:.8rem;}
+.footer{margin-top:auto; padding-top:2rem; text-align:center; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="rail">
+    <span class="eyebrow">Image-Label Quiz · Name That Picture</span>
+    <div style="display:flex;gap:.6rem;align-items:center;">
+      <span class="stamp">held in memory · offline</span>
+      <button class="themebtn" id="themeBtn" type="button">◐ Theme</button>
+    </div>
+  </div>
+
+  <!-- ============ SETUP VIEW ============ -->
+  <section id="setupView">
+    <h1>See the picture. <em>Name it</em> before the clock runs out.</h1>
+    <p class="lede">Add your own images — diagrams, flashcards, map regions, artworks — and give each a label. The quiz shows them one at a time with a 30-second timer, hides the label until you answer, and loops the ones you miss. Two example cards are loaded so you can try it right away. Images stay in memory only; nothing is uploaded.</p>
+
+    <div class="panel">
+      <div class="section-label"><b>Add images</b></div>
+      <label class="drop" id="dropZone" for="fileInput">
+        <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+        <div class="big">Tap to choose images, or drag &amp; drop</div>
+        <div class="small">PNG, JPG, GIF, WebP, SVG — as many as you like</div>
+      </label>
+      <input type="file" id="fileInput" accept="image/*" multiple>
+
+      <div class="thumbs" id="thumbs" aria-live="polite"></div>
+      <p class="count-note" id="countNote"></p>
+    </div>
+
+    <div class="start-bar">
+      <button class="btn btn-primary btn-big" id="startBtn">Start quiz →</button>
+      <div class="warn-note hide" id="startWarn"></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ VIEW ============ -->
+  <section id="quizView" class="hide">
+    <div class="quiz-meta">
+      <span class="roundtag" id="roundTag">Round 1</span>
+      <span class="score" id="scoreText">Image <b>1</b> of <b>2</b></span>
+    </div>
+    <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+
+    <div class="stage">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.7rem;">
+        <span class="clock" id="clock">0:30</span>
+        <span class="stamp" id="stageStamp">what is this?</span>
+      </div>
+      <div class="imgframe"><img id="stageImg" alt="Quiz image"></div>
+      <p class="prompt-q" id="promptQ">What is this?</p>
+
+      <div id="preAnswer">
+        <div class="reveal-bar">
+          <button class="btn btn-primary btn-big" id="revealBtn">Reveal label</button>
+        </div>
+      </div>
+
+      <div id="postAnswer" class="hide">
+        <div class="timeup hide" id="timeupMsg">⏱ Time's up</div>
+        <div class="answer-reveal">
+          <div class="lab">The label was</div>
+          <div class="val" id="answerVal">—</div>
+        </div>
+        <div class="judge-bar">
+          <button class="btn btn-wrong btn-big" id="wrongBtn">✕ Missed it</button>
+          <button class="btn btn-right btn-big" id="rightBtn">✓ Got it</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-foot">
+      <button class="linkbtn" id="quitBtn">■ End &amp; edit images</button>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS VIEW ============ -->
+  <section id="resultView" class="hide">
+    <div class="panel result-wrap">
+      <div class="result-mark" id="resultMark"></div>
+      <div class="section-label" style="justify-content:center;" id="resultLabel">Quiz complete</div>
+      <div class="big-score" id="bigScore">100%</div>
+      <p class="result-sub" id="resultSub">Nicely done.</p>
+      <div id="chipRow"></div>
+      <div class="result-actions">
+        <button class="btn btn-primary btn-big" id="restartBtn">↻ Restart quiz</button>
+        <button class="btn btn-ghost" id="editBtn">Edit images</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">IMAGE-LABEL QUIZ · workshop backup build · works offline</div>
+</div>
+
+<script>
+"use strict";
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var SECONDS_PER_IMAGE=30;
+
+  // ---------- theme ----------
+  $("themeBtn").addEventListener("click",function(){
+    var root=document.documentElement, cur=root.getAttribute("data-theme");
+    if(!cur){ cur = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"; }
+    root.setAttribute("data-theme", cur==="dark"?"light":"dark");
+  });
+
+  // ---------- inline SVG sample "images" (data URIs, no assets) ----------
+  function svgDataUri(inner){
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">'+inner+'</svg>';
+    return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);
+  }
+  var SAMPLE=[
+    { label:"Mitochondrion",
+      src:svgDataUri(
+        '<rect width="320" height="240" fill="#f0efe6"/>'+
+        '<ellipse cx="160" cy="120" rx="120" ry="66" fill="#c0532f" stroke="#7c3418" stroke-width="4"/>'+
+        '<ellipse cx="160" cy="120" rx="120" ry="66" fill="none" stroke="#7c3418" stroke-width="4"/>'+
+        '<path d="M60 120 q20 -34 40 0 q20 34 40 0 q20 -34 40 0 q20 34 40 0 q20 -34 40 0" fill="none" stroke="#f4d9b0" stroke-width="7" stroke-linecap="round"/>'+
+        '<ellipse cx="160" cy="120" rx="90" ry="40" fill="none" stroke="#e8b57a" stroke-width="3" opacity="0.7"/>')
+    },
+    { label:"Water cycle",
+      src:svgDataUri(
+        '<rect width="320" height="240" fill="#e7f0f4"/>'+
+        '<rect y="170" width="320" height="70" fill="#4a86a8"/>'+
+        '<circle cx="255" cy="52" r="26" fill="#e6b23a"/>'+
+        '<ellipse cx="90" cy="60" rx="46" ry="24" fill="#ffffff"/>'+
+        '<ellipse cx="120" cy="70" rx="38" ry="20" fill="#f2f6f8"/>'+
+        '<path d="M78 92 l0 34 M96 92 l0 34 M114 92 l0 34" stroke="#4a86a8" stroke-width="4" stroke-linecap="round"/>'+
+        '<path d="M250 150 q6 18 -6 24 q-12 6 -6 -24" fill="#4a86a8"/>'+
+        '<path d="M300 150 q0 40 -40 20" fill="none" stroke="#3f7896" stroke-width="4" stroke-dasharray="6 6"/>')
+    }
+  ];
+
+  // ---------- state ----------
+  // item: {id, src, label, isSample}
+  var items=[];
+  var nextId=1;
+
+  var queue=[], idx=0, wrongThisRound=[], roundNum=1, roundRight=0, roundTotal=0;
+  var totalUnique=0;
+  var ticker=null, secondsLeft=0, answered=false;
+
+  var setupView=$("setupView"), quizView=$("quizView"), resultView=$("resultView");
+
+  function show(view){
+    setupView.classList.add("hide"); quizView.classList.add("hide"); resultView.classList.add("hide");
+    view.classList.remove("hide");
+  }
+
+  // ---------- uploads ----------
+  var fileInput=$("fileInput"), dropZone=$("dropZone");
+  fileInput.addEventListener("change",function(e){ handleFiles(e.target.files); fileInput.value=""; });
+  ["dragenter","dragover"].forEach(function(ev){ dropZone.addEventListener(ev,function(e){ e.preventDefault(); dropZone.classList.add("over"); }); });
+  ["dragleave","drop"].forEach(function(ev){ dropZone.addEventListener(ev,function(e){ e.preventDefault(); dropZone.classList.remove("over"); }); });
+  dropZone.addEventListener("drop",function(e){ if(e.dataTransfer && e.dataTransfer.files){ handleFiles(e.dataTransfer.files); } });
+
+  function handleFiles(fileList){
+    var files=Array.prototype.slice.call(fileList||[]);
+    files.forEach(function(f){
+      if(!f.type || f.type.indexOf("image/")!==0) return;
+      var reader=new FileReader();
+      reader.onload=function(ev){
+        var base=(f.name||"image").replace(/\.[^.]+$/,"");
+        items.push({id:nextId++, src:ev.target.result, label:"", isSample:false, _suggest:base});
+        renderThumbs();
+      };
+      reader.readAsDataURL(f);
+    });
+  }
+
+  // ---------- thumbs render ----------
+  function renderThumbs(){
+    var box=$("thumbs"); box.innerHTML="";
+    if(items.length===0){
+      var e=document.createElement("div"); e.className="empty";
+      e.textContent="No images yet. Add your own above — then type a label under each.";
+      box.appendChild(e);
+    } else {
+      items.forEach(function(it){
+        var card=document.createElement("div"); card.className="thumb";
+        var ib=document.createElement("div"); ib.className="imgbox";
+        var img=document.createElement("img"); img.src=it.src; img.alt=it.label||"uploaded image";
+        ib.appendChild(img);
+        var del=document.createElement("button"); del.className="del"; del.type="button"; del.innerHTML="&times;";
+        del.setAttribute("aria-label","Remove image");
+        del.addEventListener("click",function(){ items=items.filter(function(x){return x.id!==it.id;}); renderThumbs(); });
+        ib.appendChild(del);
+        var lw=document.createElement("div"); lw.className="lblwrap";
+        var inp=document.createElement("input"); inp.className="lbl"; inp.type="text";
+        inp.placeholder="Label…"; inp.value=it.label;
+        inp.addEventListener("input",function(){ it.label=inp.value; inp.classList.remove("missing"); });
+        lw.appendChild(inp);
+        card.appendChild(ib); card.appendChild(lw);
+        box.appendChild(card);
+      });
+    }
+    var labelled=items.filter(function(x){return x.label.trim();}).length;
+    $("countNote").textContent = items.length===0 ? "" :
+      items.length+" image"+(items.length===1?"":"s")+" · "+labelled+" labelled";
+    $("startBtn").disabled = items.length===0;
+  }
+
+  // ---------- start ----------
+  $("startBtn").addEventListener("click",function(){
+    var ready=items.filter(function(x){return x.label.trim();});
+    if(ready.length===0){
+      var w=$("startWarn"); w.classList.remove("hide");
+      w.textContent="Give at least one image a label first.";
+      // mark unlabelled
+      document.querySelectorAll(".thumb input.lbl").forEach(function(inp){ if(!inp.value.trim()) inp.classList.add("missing"); });
+      return;
+    }
+    $("startWarn").classList.add("hide");
+    startQuiz(ready);
+  });
+
+  function startQuiz(ready){
+    totalUnique=ready.length;
+    roundNum=1;
+    beginRound(ready.slice());
+    show(quizView);
+  }
+  function beginRound(list){
+    queue=list.slice(); idx=0; wrongThisRound=[]; roundRight=0; roundTotal=queue.length;
+    $("roundTag").textContent = roundNum===1 ? "Round 1" : "Review · round "+roundNum;
+    showImage();
+  }
+
+  function showImage(){
+    var it=queue[idx];
+    answered=false;
+    $("stageImg").src=it.src;
+    $("stageImg").alt="Quiz image "+(idx+1);
+    $("answerVal").textContent=it.label;
+    $("promptQ").textContent="What is this?";
+    $("preAnswer").classList.remove("hide");
+    $("postAnswer").classList.add("hide");
+    $("timeupMsg").classList.add("hide");
+    $("scoreText").innerHTML="Image <b>"+(idx+1)+"</b> of <b>"+roundTotal+"</b> &nbsp;·&nbsp; <b>"+roundRight+"</b> right";
+    startTimer();
+  }
+
+  // ---------- per-image timer ----------
+  function startTimer(){
+    stopTimer();
+    secondsLeft=SECONDS_PER_IMAGE;
+    updateClock();
+    $("timerFill").style.width="100%";
+    $("timerFill").classList.remove("low");
+    // trigger transition to 0 over the full duration for a smooth bar
+    requestAnimationFrame(function(){
+      $("timerFill").style.transition="width "+SECONDS_PER_IMAGE+"s linear";
+      $("timerFill").style.width="0%";
+    });
+    ticker=setInterval(function(){
+      secondsLeft--;
+      updateClock();
+      if(secondsLeft<=5){ $("timerFill").classList.add("low"); $("clock").classList.add("low"); }
+      if(secondsLeft<=0){ timeUp(); }
+    },1000);
+  }
+  function stopTimer(){
+    if(ticker){ clearInterval(ticker); ticker=null; }
+    $("timerFill").style.transition="none";
+    $("clock").classList.remove("low");
+  }
+  function updateClock(){
+    var s=Math.max(0,secondsLeft);
+    $("clock").textContent="0:"+(s<10?"0":"")+s;
+  }
+  function timeUp(){
+    stopTimer();
+    $("timerFill").style.width="0%";
+    reveal(true);
+  }
+
+  // ---------- reveal / judge ----------
+  $("revealBtn").addEventListener("click",function(){ reveal(false); });
+  function reveal(fromTimeout){
+    if(answered) return;
+    answered=true;
+    stopTimer();
+    if(!fromTimeout){ $("timerFill").style.width="0%"; }
+    $("preAnswer").classList.add("hide");
+    $("postAnswer").classList.remove("hide");
+    $("timeupMsg").classList.toggle("hide", !fromTimeout);
+    if(fromTimeout){
+      $("promptQ").textContent="Ran out of time — did you know it?";
+    }
+  }
+
+  function judge(correct){
+    var it=queue[idx];
+    if(correct){ roundRight++; } else { wrongThisRound.push(it); }
+    idx++;
+    if(idx<queue.length){ showImage(); }
+    else { endRound(); }
+  }
+  $("rightBtn").addEventListener("click",function(){ judge(true); });
+  $("wrongBtn").addEventListener("click",function(){ judge(false); });
+
+  function endRound(){
+    if(wrongThisRound.length>0){ roundNum++; beginRound(wrongThisRound); }
+    else { showResults(); }
+  }
+
+  // ---------- quit / restart ----------
+  function backToSetup(){ stopTimer(); show(setupView); renderThumbs(); }
+  $("quitBtn").addEventListener("click",backToSetup);
+  $("editBtn").addEventListener("click",backToSetup);
+  $("restartBtn").addEventListener("click",function(){
+    var ready=items.filter(function(x){return x.label.trim();});
+    if(ready.length===0){ backToSetup(); return; }
+    startQuiz(ready);
+  });
+
+  // ---------- results ----------
+  function showResults(){
+    $("bigScore").textContent="100%";
+    $("resultLabel").textContent="All images mastered";
+    if(roundNum===1){
+      $("resultSub").textContent="Clean sweep — you named all "+totalUnique+" on the first pass.";
+    } else {
+      $("resultSub").textContent="You named all "+totalUnique+" images. It took "+roundNum+" rounds — the ones you missed kept coming back.";
+    }
+    var chips=$("chipRow"); chips.innerHTML="";
+    addChip(chips,totalUnique+" image"+(totalUnique===1?"":"s"));
+    addChip(chips,roundNum+(roundNum===1?" round":" rounds"));
+    addChip(chips,SECONDS_PER_IMAGE+"s each");
+    $("resultMark").innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg>';
+    show(resultView);
+  }
+  function addChip(parent,text){ var s=document.createElement("span"); s.className="chip"; s.textContent=text; parent.appendChild(s); }
+
+  // ---------- keyboard ----------
+  document.addEventListener("keydown",function(e){
+    if(quizView.classList.contains("hide")) return;
+    if(!answered){
+      if(e.key===" "||e.key==="Enter"){ e.preventDefault(); reveal(false); }
+    } else {
+      if(e.key==="ArrowRight"||e.key.toLowerCase()==="y"){ e.preventDefault(); judge(true); }
+      else if(e.key==="ArrowLeft"||e.key.toLowerCase()==="n"){ e.preventDefault(); judge(false); }
+    }
+  });
+
+  // ---------- init ----------
+  SAMPLE.forEach(function(s){ items.push({id:nextId++, src:s.src, label:s.label, isSample:true}); });
+  renderThumbs();
+})();
+</script>
+</body>
+</html>

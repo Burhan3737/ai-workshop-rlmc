@@ -1,0 +1,463 @@
+<!-- BACKUP: pre-built output of the Level 5 finale. Open this if the live Claude Code run stalls. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Study Smarter — the evidence</title>
+<style>
+  :root{
+    --ink:#1a1f2b;
+    --ink-soft:#3d4657;
+    --paper:#f4efe6;
+    --paper-2:#ebe3d4;
+    --accent:#c8641b;      /* ochre */
+    --accent-2:#0f6e6a;    /* deep teal */
+    --line:#d8cdb8;
+    --card:#fbf8f1;
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* subtle paper texture via layered gradients (offline, no images) */
+  .stage{
+    position:fixed;inset:0;
+    background:
+      radial-gradient(1200px 700px at 82% -10%, rgba(200,100,27,.10), transparent 60%),
+      radial-gradient(1000px 800px at -10% 110%, rgba(15,110,106,.10), transparent 55%),
+      var(--paper);
+  }
+  .stage::after{
+    content:"";position:fixed;inset:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(26,31,43,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(26,31,43,.025) 1px,transparent 1px);
+    background-size:28px 28px;
+    mask-image:radial-gradient(circle at 50% 45%,#000 40%,transparent 90%);
+  }
+
+  .slide{
+    position:absolute;inset:0;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    padding:clamp(2.4rem,6vw,6rem);
+    padding-bottom:clamp(4.6rem,8vw,7rem);
+  }
+  .slide.active{display:flex;animation:rise .6s cubic-bezier(.16,.84,.44,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .slide > *{max-width:1080px}
+
+  .kicker{
+    font-size:clamp(.72rem,1.4vw,.9rem);
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--accent);
+    display:flex;align-items:center;gap:.8rem;
+    margin-bottom:1.4rem;
+  }
+  .kicker::before{content:"";width:2.4rem;height:2px;background:var(--accent)}
+
+  h1{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:clamp(2.6rem,7.4vw,6rem);
+    line-height:.98;
+    letter-spacing:-.02em;
+  }
+  h1 em{font-style:italic;color:var(--accent)}
+  h2{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:clamp(2rem,5.4vw,4.2rem);
+    line-height:1.02;
+    letter-spacing:-.015em;
+    margin-bottom:1.2rem;
+  }
+  .lead{
+    font-size:clamp(1.05rem,2.3vw,1.7rem);
+    line-height:1.5;
+    color:var(--ink-soft);
+    max-width:44ch;
+  }
+  .lead strong{color:var(--ink);font-weight:700}
+  .big-accent{color:var(--accent-2);font-weight:700}
+
+  .num{
+    font-family:var(--serif);
+    font-size:clamp(3rem,9vw,7rem);
+    line-height:.8;
+    color:var(--paper-2);
+    -webkit-text-stroke:2px var(--line);
+    position:absolute;
+    top:clamp(1.6rem,4vw,3rem);
+    right:clamp(1.8rem,4vw,3.4rem);
+    z-index:0;
+    user-select:none;
+  }
+
+  /* title slide */
+  .title-meta{
+    margin-top:2.4rem;
+    display:flex;flex-wrap:wrap;gap:.7rem;
+  }
+  .pill{
+    border:1.5px solid var(--ink);
+    border-radius:2rem;
+    padding:.5rem 1.1rem;
+    font-size:clamp(.8rem,1.6vw,1rem);
+    font-weight:600;
+    letter-spacing:.01em;
+  }
+  .byline{
+    margin-top:2.6rem;font-size:.92rem;color:var(--ink-soft);
+    letter-spacing:.02em;max-width:52ch;line-height:1.5;
+  }
+
+  /* content two-column */
+  .cols{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(1.6rem,4vw,3.4rem);align-items:center;margin-top:.4rem}
+  @media(max-width:820px){.cols{grid-template-columns:1fr;gap:1.4rem}}
+
+  ul.points{list-style:none;display:flex;flex-direction:column;gap:1rem;margin-top:1.4rem}
+  ul.points li{
+    display:flex;gap:.9rem;align-items:flex-start;
+    font-size:clamp(.98rem,1.9vw,1.28rem);line-height:1.4;color:var(--ink-soft);
+  }
+  ul.points li strong{color:var(--ink)}
+  ul.points li::before{
+    content:"";flex:0 0 auto;margin-top:.55em;
+    width:.7rem;height:.7rem;border-radius:2px;
+    background:var(--accent);transform:rotate(45deg);
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:1.1rem;
+    padding:clamp(1.3rem,3vw,2rem);
+    box-shadow:0 22px 50px -30px rgba(26,31,43,.5);
+  }
+  .stat{font-family:var(--serif);font-size:clamp(2.6rem,7vw,4.6rem);line-height:.9;color:var(--accent-2)}
+  .stat-label{margin-top:.7rem;font-size:clamp(.86rem,1.7vw,1.05rem);color:var(--ink-soft);line-height:1.4}
+
+  /* forgetting curve svg */
+  .curve{width:100%;height:auto;display:block}
+
+  /* interleaving diagram */
+  .blocks{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem}
+  .blk{width:2.1rem;height:2.1rem;border-radius:.4rem;display:grid;place-items:center;font-weight:700;color:#fff;font-size:.85rem}
+  .bA{background:var(--accent)}.bB{background:var(--accent-2)}.bC{background:var(--ink)}
+  .diag-label{font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin:.9rem 0 .35rem}
+
+  /* action checklist */
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:1rem 2rem;margin-top:1.6rem}
+  @media(max-width:820px){.checks{grid-template-columns:1fr}}
+  .check{display:flex;gap:.85rem;align-items:flex-start;font-size:clamp(.96rem,1.8vw,1.2rem);line-height:1.35;color:var(--ink-soft)}
+  .check b{color:var(--ink)}
+  .check .box{flex:0 0 auto;width:1.5rem;height:1.5rem;border-radius:.35rem;border:2px solid var(--accent-2);position:relative;margin-top:.1rem}
+  .check .box::after{content:"";position:absolute;left:.42rem;top:.12rem;width:.4rem;height:.75rem;border:solid var(--accent-2);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+
+  /* sources */
+  .sources{display:flex;flex-direction:column;gap:1rem;margin-top:1.3rem;max-width:none}
+  .src{
+    display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:baseline;
+    font-size:clamp(.85rem,1.6vw,1.05rem);line-height:1.45;color:var(--ink-soft);
+    padding-bottom:1rem;border-bottom:1px solid var(--line);
+  }
+  .src:last-child{border-bottom:none}
+  .src .tag{font-family:var(--serif);color:var(--accent);font-weight:700;font-size:1em}
+  .src strong{color:var(--ink)}
+  .myth{
+    margin-top:1.4rem;background:var(--card);border:1px solid var(--line);
+    border-left:5px solid var(--accent);border-radius:.7rem;
+    padding:1rem 1.3rem;font-size:clamp(.9rem,1.7vw,1.1rem);color:var(--ink-soft);line-height:1.45;
+  }
+  .myth b{color:var(--ink)}
+
+  /* nav */
+  .nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:5;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.9rem clamp(1.4rem,4vw,3rem);
+    background:linear-gradient(to top,var(--paper),rgba(244,239,230,0));
+  }
+  .progress{position:fixed;left:0;top:0;height:4px;background:var(--accent);z-index:6;transition:width .45s cubic-bezier(.16,.84,.44,1)}
+  .btns{display:flex;gap:.6rem}
+  button.nb{
+    font-family:var(--sans);font-weight:700;font-size:.92rem;
+    border:1.5px solid var(--ink);background:transparent;color:var(--ink);
+    padding:.55rem 1.15rem;border-radius:2rem;cursor:pointer;
+    display:flex;align-items:center;gap:.4rem;transition:all .18s;
+  }
+  button.nb:hover{background:var(--ink);color:var(--paper)}
+  button.nb:disabled{opacity:.32;cursor:not-allowed}
+  button.nb:disabled:hover{background:transparent;color:var(--ink)}
+  .counter{font-family:var(--serif);font-size:1rem;letter-spacing:.05em;color:var(--ink-soft)}
+  .counter b{color:var(--ink);font-size:1.2rem}
+  .hint{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);opacity:.7}
+  @media(max-width:640px){.hint{display:none}}
+</style>
+</head>
+<body>
+<div class="stage" aria-hidden="true"></div>
+<div class="progress" id="progress"></div>
+
+<!-- 1. TITLE -->
+<section class="slide active">
+  <div class="kicker">Evidence-based learning</div>
+  <h1>How to Study<br><em>Smarter</em> — the evidence</h1>
+  <div class="title-meta">
+    <span class="pill">Active recall</span>
+    <span class="pill">Spaced repetition</span>
+    <span class="pill">Interleaving</span>
+  </div>
+  <p class="byline">A short, research-backed guide to the techniques cognitive science actually
+  supports — and the popular ones that quietly waste your time.</p>
+</section>
+
+<!-- 2. ACTIVE RECALL -->
+<section class="slide">
+  <span class="num">01</span>
+  <div class="kicker">Retrieval practice</div>
+  <h2>Test yourself,<br>don't re-read</h2>
+  <div class="cols">
+    <div>
+      <p class="lead">Pulling an answer <strong>out of your memory</strong> strengthens it far more
+      than putting information back in by re-reading.</p>
+      <ul class="points">
+        <li><strong>Close the book</strong> and write what you remember, then check.</li>
+        <li>Use flashcards, practice questions, or a blank page.</li>
+        <li>The effort of retrieval <em>is</em> the learning — struggle is the point.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="stat">+50%</div>
+      <div class="stat-label">Students who were tested recalled about half as much again a week later
+      as those who only re-read the same material.<br><span style="opacity:.7">— Roediger &amp; Karpicke, 2006</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. SPACED REPETITION -->
+<section class="slide">
+  <span class="num">02</span>
+  <div class="kicker">The spacing effect</div>
+  <h2>Space it out,<br>beat forgetting</h2>
+  <div class="cols">
+    <div>
+      <p class="lead">Memory fades on a predictable curve. Reviewing at <strong>growing intervals</strong>
+      resets the curve and locks knowledge in for the long term.</p>
+      <ul class="points">
+        <li>Study a little, <strong>often</strong> — not all at once.</li>
+        <li>Review after 1 day, then 3, then a week, then longer.</li>
+        <li>Beats cramming for durable, exam-day retention.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <svg class="curve" viewBox="0 0 320 190" role="img" aria-label="Forgetting curve with spaced reviews">
+        <line x1="34" y1="12" x2="34" y2="158" stroke="#d8cdb8" stroke-width="1.5"/>
+        <line x1="34" y1="158" x2="312" y2="158" stroke="#d8cdb8" stroke-width="1.5"/>
+        <path d="M34,26 C70,120 120,150 150,152" fill="none" stroke="#c8641b" stroke-width="3" opacity=".45"/>
+        <path d="M150,152 L150,40 C176,96 210,120 232,124" fill="none" stroke="#0f6e6a" stroke-width="3"/>
+        <path d="M232,124 L232,34 C252,74 282,92 306,96" fill="none" stroke="#0f6e6a" stroke-width="3"/>
+        <g fill="#0f6e6a"><circle cx="150" cy="40" r="4"/><circle cx="232" cy="34" r="4"/></g>
+        <text x="6" y="90" transform="rotate(-90 12 90)" font-family="Georgia,serif" font-size="11" fill="#3d4657">Memory</text>
+        <text x="150" y="176" font-family="Georgia,serif" font-size="11" fill="#3d4657" text-anchor="middle">Time →</text>
+      </svg>
+      <div class="stat-label" style="margin-top:.6rem">Each review (dots) slows the next drop-off.<br>
+      <span style="opacity:.7">Ebbinghaus forgetting curve, 1885</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. INTERLEAVING -->
+<section class="slide">
+  <span class="num">03</span>
+  <div class="kicker">Mix it up</div>
+  <h2>Interleave your<br>topics</h2>
+  <div class="cols">
+    <div>
+      <p class="lead">Instead of drilling one topic to exhaustion (<strong>blocking</strong>),
+      shuffle related topics together. It's harder now — and that's why it works.</p>
+      <ul class="points">
+        <li>Mixing forces you to <strong>choose the right strategy</strong>, not just repeat one.</li>
+        <li>Great for maths, problem sets, languages, and concepts that get confused.</li>
+        <li>Feels slower, but transfers far better to the real test.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="diag-label">Blocked — feels easy</div>
+      <div class="blocks">
+        <span class="blk bA">A</span><span class="blk bA">A</span><span class="blk bA">A</span>
+        <span class="blk bB">B</span><span class="blk bB">B</span><span class="blk bB">B</span>
+        <span class="blk bC">C</span><span class="blk bC">C</span><span class="blk bC">C</span>
+      </div>
+      <div class="diag-label" style="color:var(--accent-2)">Interleaved — learns better</div>
+      <div class="blocks">
+        <span class="blk bA">A</span><span class="blk bC">C</span><span class="blk bB">B</span>
+        <span class="blk bC">C</span><span class="blk bA">A</span><span class="blk bB">B</span>
+        <span class="blk bB">B</span><span class="blk bC">C</span><span class="blk bA">A</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ELABORATION / FEYNMAN -->
+<section class="slide">
+  <span class="num">04</span>
+  <div class="kicker">Elaboration &amp; the Feynman technique</div>
+  <h2>Explain it simply,<br>ask <em>why</em></h2>
+  <div class="cols">
+    <div>
+      <p class="lead">Understanding grows when you connect new ideas to what you already know
+      and put them <strong>in your own words</strong>.</p>
+      <ul class="points">
+        <li>Teach the idea aloud <strong>as if to a 12-year-old</strong>.</li>
+        <li>Where you stumble is exactly where your understanding is thin.</li>
+        <li>Keep asking <em>“why?”</em> and <em>“how does this connect?”</em></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="stat-label" style="margin-bottom:.6rem;font-weight:700;color:var(--ink)">The Feynman loop</div>
+      <ul class="points" style="margin-top:0;gap:.7rem">
+        <li>Pick a concept &amp; write it plainly</li>
+        <li>Explain it in simple language</li>
+        <li>Spot the gaps — go relearn them</li>
+        <li>Simplify again until it's obvious</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 6. ILLUSION OF COMPETENCE -->
+<section class="slide">
+  <span class="num">05</span>
+  <div class="kicker">The illusion of competence</div>
+  <h2>Familiar isn't<br>the same as known</h2>
+  <div class="cols">
+    <div>
+      <p class="lead">Highlighting and re-reading make text feel <strong>fluent and familiar</strong>,
+      so your brain mistakes recognition for real understanding.</p>
+      <ul class="points">
+        <li>Rated among the <strong>least effective</strong> techniques in a major review.</li>
+        <li>Fluency ≠ mastery — you can't recall it when the page is gone.</li>
+        <li>Swap passive review for <span class="big-accent">active recall</span>.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="stat">low</div>
+      <div class="stat-label">Utility rating for highlighting/underlining and re-reading in Dunlosky et al.'s
+      review of 10 study techniques — popular, but weak.<br>
+      <span style="opacity:.7">— Dunlosky et al., 2013</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. ACTION -->
+<section class="slide">
+  <span class="num">06</span>
+  <div class="kicker">Do it this week</div>
+  <h2>Your smarter-study<br>starter plan</h2>
+  <div class="checks">
+    <div class="check"><span class="box"></span><span><b>Ditch the highlighter.</b> After reading, close the book and write what you recall.</span></div>
+    <div class="check"><span class="box"></span><span><b>Build a question bank.</b> Turn notes into flashcards or practice questions.</span></div>
+    <div class="check"><span class="box"></span><span><b>Schedule reviews.</b> Revisit at 1 day, 3 days, 1 week, then fortnightly.</span></div>
+    <div class="check"><span class="box"></span><span><b>Interleave sessions.</b> Mix 2–3 related topics instead of one long block.</span></div>
+    <div class="check"><span class="box"></span><span><b>Teach it out loud.</b> Explain each idea simply; hunt down the gaps.</span></div>
+    <div class="check"><span class="box"></span><span><b>Space, don't cram.</b> Short daily sessions beat one all-nighter.</span></div>
+  </div>
+</section>
+
+<!-- 8. SOURCES -->
+<section class="slide">
+  <span class="num">07</span>
+  <div class="kicker">The evidence</div>
+  <h2>Sources</h2>
+  <div class="sources">
+    <div class="src">
+      <span class="tag">1</span>
+      <span><strong>Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013).</strong>
+      Improving Students' Learning With Effective Learning Techniques. <em>Psychological Science in the Public Interest, 14(1),</em> 4–58.
+      — Ranks practice testing &amp; distributed practice highest; highlighting &amp; re-reading lowest.</span>
+    </div>
+    <div class="src">
+      <span class="tag">2</span>
+      <span><strong>Roediger, H. L., &amp; Karpicke, J. D. (2006).</strong>
+      Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention. <em>Psychological Science, 17(3),</em> 249–255.
+      — Core evidence for the testing (retrieval-practice) effect.</span>
+    </div>
+    <div class="src">
+      <span class="tag">3</span>
+      <span><strong>Weinstein, Y., Madan, C. R., &amp; Sumeracki, M. A. (2018).</strong>
+      Teaching the science of learning. <em>Cognitive Research: Principles and Implications, 3,</em> 2.
+      — Practical review of retrieval practice, spacing, interleaving &amp; elaboration.</span>
+    </div>
+    <div class="src">
+      <span class="tag">4</span>
+      <span><strong>Pashler, H., McDaniel, M., Rohrer, D., &amp; Bjork, R. (2008).</strong>
+      Learning Styles: Concepts and Evidence. <em>Psychological Science in the Public Interest, 9(3),</em> 105–119.</span>
+    </div>
+  </div>
+  <div class="myth">
+    <b>Myth, debunked:</b> “learning styles” (visual/auditory/kinesthetic) have <b>no credible evidence</b>.
+    Matching teaching to a supposed style doesn't improve learning — so don't waste effort on it. Use the methods above instead.
+  </div>
+</section>
+
+<!-- NAV -->
+<div class="nav">
+  <span class="hint">← → / space to move</span>
+  <div class="btns">
+    <button class="nb" id="prev" aria-label="Previous slide">‹ Prev</button>
+    <button class="nb" id="next" aria-label="Next slide">Next ›</button>
+  </div>
+  <span class="counter"><b id="cur">1</b> / <span id="total">8</span></span>
+</div>
+
+<script>
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  var curEl = document.getElementById('cur');
+  var totalEl = document.getElementById('total');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var progress = document.getElementById('progress');
+  totalEl.textContent = slides.length;
+
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, idx){ s.classList.toggle('active', idx === i); });
+    curEl.textContent = i + 1;
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    prevBtn.disabled = (i === 0);
+    nextBtn.disabled = (i === slides.length - 1);
+  }
+  function next(){ if(i < slides.length - 1) show(i + 1); }
+  function prev(){ if(i > 0) show(i - 1); }
+
+  nextBtn.addEventListener('click', next);
+  prevBtn.addEventListener('click', prev);
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Spacebar' || e.key === 'PageDown'){
+      e.preventDefault(); next();
+    } else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){
+      e.preventDefault(); prev();
+    } else if(e.key === 'Home'){ e.preventDefault(); show(0); }
+    else if(e.key === 'End'){ e.preventDefault(); show(slides.length - 1); }
+  });
+
+  show(0);
+</script>
+</body>
+</html>

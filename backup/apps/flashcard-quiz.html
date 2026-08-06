@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcard Quiz — Flip It</title>
+<style>
+/* ============================================================
+   FLASHCARD QUIZ — matches the workshop deck's "Observation
+   Chart" language: surgical green on clinical off-white,
+   burnt vermilion for alarm, Georgia / Segoe UI / Consolas,
+   graph-paper ground, chart header rail.
+   Single file, fully offline, no external assets.
+   ============================================================ */
+:root{
+  --ground:#F4F6F5; --surface:#FFFFFF; --ink:#12201F; --muted:#5C6E6B;
+  --accent:#0F5C4E; --accent-ink:#FFFFFF; --accent-soft:#E2EDE8;
+  --alarm:#A93C17; --alarm-soft:#F8E9E2; --gold:#8A6A1E; --gold-soft:#F3ECD8;
+  --rule:#D5DDDA; --grid:rgba(15,92,78,.055);
+  --display:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --body:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Code",Consolas,"SF Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(18,32,31,.05),0 8px 26px rgba(18,32,31,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#0B1211; --surface:#111C1A; --ink:#E9F0ED; --muted:#90A49F;
+    --accent:#46BFA0; --accent-ink:#06110E; --accent-soft:#15302A;
+    --alarm:#E8814F; --alarm-soft:#31201A; --gold:#D8B75A; --gold-soft:#2A2415;
+    --rule:#23342F; --grid:rgba(70,191,160,.062);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1211; --surface:#111C1A; --ink:#E9F0ED; --muted:#90A49F;
+  --accent:#46BFA0; --accent-ink:#06110E; --accent-soft:#15302A;
+  --alarm:#E8814F; --alarm-soft:#31201A; --gold:#D8B75A; --gold-soft:#2A2415;
+  --rule:#23342F; --grid:rgba(70,191,160,.062);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --ground:#F4F6F5; --surface:#FFFFFF; --ink:#12201F; --muted:#5C6E6B;
+  --accent:#0F5C4E; --accent-ink:#FFFFFF; --accent-soft:#E2EDE8;
+  --alarm:#A93C17; --alarm-soft:#F8E9E2; --gold:#8A6A1E; --gold-soft:#F3ECD8;
+  --rule:#D5DDDA; --grid:rgba(15,92,78,.055);
+  --shadow:0 1px 2px rgba(18,32,31,.05),0 8px 26px rgba(18,32,31,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background-color:var(--ground);
+  background-image:
+    repeating-linear-gradient(to right,var(--grid) 0 1px,transparent 1px 34px),
+    repeating-linear-gradient(to bottom,var(--grid) 0 1px,transparent 1px 34px);
+  color:var(--ink); font-family:var(--body);
+  line-height:1.55; -webkit-font-smoothing:antialiased;
+  min-height:100vh; display:flex; flex-direction:column;
+}
+.wrap{width:100%; max-width:820px; margin:0 auto; padding:clamp(1rem,3vw,2rem) clamp(1rem,4vw,2.4rem) 3rem; flex:1 1 auto; display:flex; flex-direction:column;}
+
+/* header rail */
+.rail{display:flex; align-items:baseline; justify-content:space-between; gap:1rem; padding-bottom:.6rem; border-bottom:1px solid var(--rule); flex-wrap:wrap;}
+.eyebrow{font-family:var(--mono); font-size:clamp(.66rem,.5rem+.28vw,.8rem); letter-spacing:.17em; text-transform:uppercase; color:var(--accent); font-weight:600;}
+.stamp{font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; color:var(--muted);}
+.themebtn{font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); background:transparent; border:1px solid var(--rule); border-radius:999px; padding:.32rem .7rem; cursor:pointer;}
+.themebtn:hover{border-color:var(--accent); color:var(--accent);}
+
+h1{font-family:var(--display); font-weight:600; font-size:clamp(1.9rem,1.3rem+2.6vw,3rem); line-height:1.05; letter-spacing:-.01em; margin:1.4rem 0 .3rem;}
+h1 .flip{color:var(--accent); font-style:italic;}
+.lede{color:var(--muted); font-size:clamp(1rem,.9rem+.4vw,1.15rem); max-width:56ch; margin-bottom:1.6rem;}
+
+.panel{background:var(--surface); border:1px solid var(--rule); border-radius:16px; box-shadow:var(--shadow); padding:clamp(1.1rem,3vw,1.8rem);}
+.section-label{font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:.9rem; display:flex; align-items:center; gap:.5rem;}
+.section-label b{color:var(--accent); font-weight:700;}
+
+/* add form */
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:.8rem;}
+@media (max-width:560px){.form-grid{grid-template-columns:1fr;}}
+label.fld{display:flex; flex-direction:column; gap:.35rem; font-size:.8rem; color:var(--muted); font-weight:600;}
+input[type=text],textarea{font-family:var(--body); font-size:1rem; color:var(--ink); background:var(--ground); border:1.5px solid var(--rule); border-radius:10px; padding:.7rem .8rem; width:100%; resize:vertical;}
+input[type=text]:focus,textarea:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);}
+.form-actions{display:flex; gap:.6rem; margin-top:.9rem; flex-wrap:wrap;}
+
+/* buttons */
+.btn{font-family:var(--body); font-weight:600; font-size:.95rem; border:1.5px solid transparent; border-radius:10px; padding:.7rem 1.2rem; cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; transition:transform .08s ease, background .15s, border-color .15s;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--accent); color:var(--accent-ink);}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent; color:var(--ink); border-color:var(--rule);}
+.btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+.btn-big{font-size:1.1rem; padding:.9rem 1.6rem;}
+.btn[disabled]{opacity:.45; cursor:not-allowed;}
+
+/* card list */
+.cardlist{list-style:none; margin-top:1.2rem; display:flex; flex-direction:column; gap:.6rem;}
+.crow{display:flex; gap:.8rem; align-items:flex-start; background:var(--ground); border:1px solid var(--rule); border-radius:10px; padding:.75rem .9rem;}
+.crow .num{font-family:var(--mono); font-size:.75rem; color:var(--accent); font-weight:700; padding-top:.15rem; min-width:1.6rem;}
+.crow .qa{flex:1 1 auto; min-width:0;}
+.crow .q{font-weight:600; word-wrap:break-word;}
+.crow .a{color:var(--muted); font-size:.92rem; word-wrap:break-word; margin-top:.15rem;}
+.crow .del{background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:1.1rem; line-height:1; padding:.2rem .35rem; border-radius:6px;}
+.crow .del:hover{color:var(--alarm); background:var(--alarm-soft);}
+.count-note{font-family:var(--mono); font-size:.72rem; color:var(--muted); margin-top:1rem; letter-spacing:.05em;}
+.empty{color:var(--muted); text-align:center; padding:2rem 1rem; font-style:italic;}
+
+.start-bar{margin-top:1.6rem; display:flex; justify-content:center;}
+
+/* ---- quiz view ---- */
+.hide{display:none !important;}
+.quiz-meta{display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1.1rem; flex-wrap:wrap;}
+.roundtag{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft); padding:.35rem .7rem; border-radius:999px; font-weight:700;}
+.score{font-family:var(--mono); font-size:.85rem; color:var(--muted); letter-spacing:.05em;}
+.score b{color:var(--ink);}
+.progress-track{height:8px; background:var(--accent-soft); border-radius:999px; overflow:hidden; margin-bottom:1.4rem;}
+.progress-fill{height:100%; background:var(--accent); width:0%; transition:width .35s ease; border-radius:999px;}
+
+.flashcard{perspective:1600px; margin-bottom:1.3rem;}
+.fc-inner{position:relative; min-height:230px; transition:transform .5s cubic-bezier(.4,.1,.2,1); transform-style:preserve-3d;}
+.fc-inner.flipped{transform:rotateX(180deg);}
+.fc-face{position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:16px; border:1px solid var(--rule); box-shadow:var(--shadow); padding:clamp(1.4rem,4vw,2.4rem); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;}
+.fc-front{background:var(--surface);}
+.fc-back{background:var(--accent-soft); transform:rotateX(180deg);}
+.fc-kicker{font-family:var(--mono); font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;}
+.fc-back .fc-kicker{color:var(--accent);}
+.fc-text{font-family:var(--display); font-size:clamp(1.4rem,1rem+2.4vw,2.1rem); line-height:1.25; color:var(--ink);}
+.fc-hint{margin-top:1.3rem; font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; color:var(--muted);}
+
+.reveal-bar{display:flex; justify-content:center; margin-bottom:.4rem;}
+.judge-bar{display:grid; grid-template-columns:1fr 1fr; gap:.8rem;}
+.btn-wrong{background:var(--alarm-soft); color:var(--alarm); border-color:transparent; justify-content:center;}
+.btn-wrong:hover{background:var(--alarm); color:#fff;}
+.btn-right{background:var(--accent); color:var(--accent-ink); justify-content:center;}
+.btn-right:hover{filter:brightness(1.08);}
+.quiz-foot{margin-top:1.4rem; display:flex; justify-content:center;}
+.linkbtn{background:transparent; border:none; color:var(--muted); font-family:var(--mono); font-size:.75rem; letter-spacing:.08em; cursor:pointer; text-transform:uppercase;}
+.linkbtn:hover{color:var(--alarm);}
+
+/* ---- results ---- */
+.result-wrap{text-align:center; padding:1rem 0;}
+.result-mark{width:88px; height:88px; margin:0 auto 1.2rem; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--accent-soft);}
+.result-mark svg{width:46px; height:46px;}
+.big-score{font-family:var(--display); font-size:clamp(2.4rem,1.6rem+4vw,4rem); line-height:1; color:var(--accent); margin:.2rem 0;}
+.result-sub{color:var(--muted); max-width:44ch; margin:.4rem auto 1.6rem; font-size:1.05rem;}
+.result-actions{display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap;}
+.chip{display:inline-block; font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; padding:.3rem .7rem; border-radius:999px; background:var(--ground); border:1px solid var(--rule); color:var(--muted); margin:.2rem;}
+.footer{margin-top:auto; padding-top:2rem; text-align:center; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="rail">
+    <span class="eyebrow">03 · Flip it · Flashcard Quiz</span>
+    <div style="display:flex;gap:.6rem;align-items:center;">
+      <span class="stamp" id="railStamp">offline · single file</span>
+      <button class="themebtn" id="themeBtn" type="button">◐ Theme</button>
+    </div>
+  </div>
+
+  <!-- ============ EDITOR VIEW ============ -->
+  <section id="editorView">
+    <h1>Stop asking it questions.<br><span class="flip">Make it test you.</span></h1>
+    <p class="lede">Type your question/answer pairs below, then run the quiz. It shows one card at a time, hides the answer until you reveal it, tracks your score, and loops the ones you miss until you've got them all.</p>
+
+    <div class="panel">
+      <div class="section-label"><b>Add a card</b></div>
+      <form id="addForm" class="form-grid">
+        <label class="fld">Question
+          <input type="text" id="qInput" placeholder="e.g. Where does photosynthesis happen?" autocomplete="off">
+        </label>
+        <label class="fld">Answer
+          <input type="text" id="aInput" placeholder="e.g. In the chloroplasts" autocomplete="off">
+        </label>
+        <div class="form-actions" style="grid-column:1/-1;">
+          <button type="submit" class="btn btn-primary">+ Add card</button>
+          <button type="button" class="btn btn-ghost" id="clearAllBtn">Clear all</button>
+          <button type="button" class="btn btn-ghost" id="loadSampleBtn">Load example set</button>
+        </div>
+      </form>
+
+      <ul class="cardlist" id="cardList" aria-live="polite"></ul>
+      <p class="count-note" id="countNote"></p>
+    </div>
+
+    <div class="start-bar">
+      <button class="btn btn-primary btn-big" id="startBtn">Start quiz →</button>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ VIEW ============ -->
+  <section id="quizView" class="hide">
+    <div class="quiz-meta">
+      <span class="roundtag" id="roundTag">Round 1</span>
+      <span class="score" id="scoreText">Card <b>1</b> of <b>6</b></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="flashcard">
+      <div class="fc-inner" id="fcInner">
+        <div class="fc-face fc-front">
+          <div class="fc-kicker">Question</div>
+          <div class="fc-text" id="qText">—</div>
+          <div class="fc-hint" id="frontHint">tap reveal to see the answer</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-kicker">Answer</div>
+          <div class="fc-text" id="aText">—</div>
+          <div class="fc-hint">did you get it?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal-bar" id="revealBar">
+      <button class="btn btn-primary btn-big" id="revealBtn">Reveal answer</button>
+    </div>
+
+    <div class="judge-bar hide" id="judgeBar">
+      <button class="btn btn-wrong btn-big" id="wrongBtn">✕ Got it wrong</button>
+      <button class="btn btn-right btn-big" id="rightBtn">✓ Got it right</button>
+    </div>
+
+    <div class="quiz-foot">
+      <button class="linkbtn" id="quitBtn">■ End &amp; edit cards</button>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS VIEW ============ -->
+  <section id="resultView" class="hide">
+    <div class="panel result-wrap">
+      <div class="result-mark" id="resultMark"></div>
+      <div class="section-label" style="justify-content:center;" id="resultLabel">Quiz complete</div>
+      <div class="big-score" id="bigScore">100%</div>
+      <p class="result-sub" id="resultSub">Nicely done.</p>
+      <div id="chipRow"></div>
+      <div class="result-actions">
+        <button class="btn btn-primary btn-big" id="restartBtn">↻ Restart quiz</button>
+        <button class="btn btn-ghost" id="editBtn">Edit cards</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">FLASHCARD QUIZ · workshop backup build · works offline</div>
+</div>
+
+<script>
+"use strict";
+(function(){
+  // ---------- data ----------
+  var SAMPLE = [
+    {q:"What is photosynthesis, in one line?", a:"How plants turn light, water and CO₂ into glucose (food) and oxygen."},
+    {q:"Where in the plant cell does it happen?", a:"In the chloroplasts, which contain the green pigment chlorophyll."},
+    {q:"What are the three raw ingredients?", a:"Sunlight, water (H₂O) and carbon dioxide (CO₂)."},
+    {q:"What two things does it produce?", a:"Glucose (stored energy) and oxygen (released into the air)."},
+    {q:"What is the job of chlorophyll?", a:"It absorbs light energy — mostly red and blue — to power the reaction."},
+    {q:"Word equation for photosynthesis?", a:"Carbon dioxide + water → (light) → glucose + oxygen."}
+  ];
+
+  var cards = [];              // full deck: {q,a}
+  var queue = [];              // cards to ask this round
+  var idx = 0;                 // position in queue
+  var wrongThisRound = [];     // cards missed this round
+  var roundNum = 1;
+  var roundRight = 0, roundTotal = 0;
+  var mastered = 0;            // total cards cleared correctly across rounds
+  var totalUnique = 0;         // size of original deck for this run
+
+  // ---------- element refs ----------
+  var $ = function(id){ return document.getElementById(id); };
+  var editorView=$("editorView"), quizView=$("quizView"), resultView=$("resultView");
+  var cardList=$("cardList"), countNote=$("countNote");
+  var qInput=$("qInput"), aInput=$("aInput");
+
+  // ---------- theme ----------
+  $("themeBtn").addEventListener("click", function(){
+    var root=document.documentElement;
+    var cur=root.getAttribute("data-theme");
+    if(!cur){ // detect current from media query
+      cur = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light";
+    }
+    root.setAttribute("data-theme", cur==="dark"?"light":"dark");
+  });
+
+  // ---------- editor: render ----------
+  function renderList(){
+    cardList.innerHTML="";
+    if(cards.length===0){
+      var li=document.createElement("li");
+      li.className="empty";
+      li.textContent="No cards yet. Add your own above, or load the example set to try it out.";
+      cardList.appendChild(li);
+    } else {
+      cards.forEach(function(c,i){
+        var li=document.createElement("li");
+        li.className="crow";
+        var num=document.createElement("span"); num.className="num"; num.textContent=(i+1<10?"0":"")+(i+1);
+        var qa=document.createElement("div"); qa.className="qa";
+        var q=document.createElement("div"); q.className="q"; q.textContent=c.q;
+        var a=document.createElement("div"); a.className="a"; a.textContent=c.a;
+        qa.appendChild(q); qa.appendChild(a);
+        var del=document.createElement("button"); del.className="del"; del.type="button";
+        del.setAttribute("aria-label","Delete card "+(i+1)); del.innerHTML="&times;";
+        del.addEventListener("click", function(){ cards.splice(i,1); renderList(); });
+        li.appendChild(num); li.appendChild(qa); li.appendChild(del);
+        cardList.appendChild(li);
+      });
+    }
+    countNote.textContent = cards.length===1 ? "1 card in the deck." : cards.length+" cards in the deck.";
+    $("startBtn").disabled = cards.length===0;
+  }
+
+  // ---------- editor: events ----------
+  $("addForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var q=qInput.value.trim(), a=aInput.value.trim();
+    if(!q || !a){
+      if(!q){ qInput.focus(); } else { aInput.focus(); }
+      return;
+    }
+    cards.push({q:q,a:a});
+    qInput.value=""; aInput.value=""; qInput.focus();
+    renderList();
+  });
+  $("clearAllBtn").addEventListener("click", function(){
+    if(cards.length && !confirm("Remove all "+cards.length+" cards?")) return;
+    cards=[]; renderList();
+  });
+  $("loadSampleBtn").addEventListener("click", function(){
+    SAMPLE.forEach(function(c){ cards.push({q:c.q,a:c.a}); });
+    renderList();
+  });
+
+  // ---------- quiz flow ----------
+  function show(view){
+    editorView.classList.add("hide"); quizView.classList.add("hide"); resultView.classList.add("hide");
+    view.classList.remove("hide");
+  }
+
+  function startQuiz(){
+    if(cards.length===0) return;
+    totalUnique = cards.length;
+    mastered = 0;
+    roundNum = 1;
+    beginRound(cards.slice());
+    show(quizView);
+  }
+
+  function beginRound(cardsForRound){
+    queue = cardsForRound.slice();
+    idx = 0;
+    wrongThisRound = [];
+    roundRight = 0;
+    roundTotal = queue.length;
+    $("roundTag").textContent = roundNum===1 ? "Round 1" : "Review · round "+roundNum;
+    showCard();
+  }
+
+  function showCard(){
+    var c = queue[idx];
+    unflip();
+    $("qText").textContent = c.q;
+    $("aText").textContent = c.a;
+    $("frontHint").textContent = "tap reveal to see the answer";
+    $("revealBar").classList.remove("hide");
+    $("judgeBar").classList.add("hide");
+    $("scoreText").innerHTML = "Card <b>"+(idx+1)+"</b> of <b>"+roundTotal+"</b> &nbsp;·&nbsp; <b>"+roundRight+"</b> right";
+    var pct = roundTotal? Math.round((idx/roundTotal)*100):0;
+    $("progressFill").style.width = pct+"%";
+  }
+
+  function flip(){ $("fcInner").classList.add("flipped"); }
+  function unflip(){ $("fcInner").classList.remove("flipped"); }
+
+  $("revealBtn").addEventListener("click", function(){
+    flip();
+    $("revealBar").classList.add("hide");
+    $("judgeBar").classList.remove("hide");
+  });
+
+  function judge(correct){
+    var c = queue[idx];
+    if(correct){ roundRight++; mastered++; }
+    else { wrongThisRound.push(c); }
+    idx++;
+    if(idx < queue.length){
+      showCard();
+    } else {
+      $("progressFill").style.width="100%";
+      endRound();
+    }
+  }
+  $("rightBtn").addEventListener("click", function(){ judge(true); });
+  $("wrongBtn").addEventListener("click", function(){ judge(false); });
+
+  function endRound(){
+    if(wrongThisRound.length > 0){
+      roundNum++;
+      beginRound(wrongThisRound);
+    } else {
+      showResults();
+    }
+  }
+
+  $("quitBtn").addEventListener("click", function(){ show(editorView); renderList(); });
+  $("editBtn").addEventListener("click", function(){ show(editorView); renderList(); });
+  $("restartBtn").addEventListener("click", startQuiz);
+  $("startBtn").addEventListener("click", startQuiz);
+
+  // ---------- results ----------
+  function showResults(){
+    // every card is cleared by definition (the loop keeps re-asking misses), so mastery is 100%
+    $("bigScore").textContent = "100%";
+    $("resultLabel").textContent = "All cards mastered";
+    var rounds = roundNum;
+    if(rounds===1){
+      $("resultSub").textContent = "Clean sweep — you cleared all "+totalUnique+" cards on the first pass. That's the good stuff.";
+    } else {
+      $("resultSub").textContent = "You cleared all "+totalUnique+" cards. It took "+rounds+" rounds — the ones you missed kept coming back until they stuck.";
+    }
+    var chips=$("chipRow"); chips.innerHTML="";
+    addChip(chips, totalUnique+" cards");
+    addChip(chips, rounds+(rounds===1?" round":" rounds"));
+    $("resultMark").style.background = "var(--accent-soft)";
+    $("resultMark").innerHTML = checkSVG();
+    show(resultView);
+  }
+  function addChip(parent, text){
+    var s=document.createElement("span"); s.className="chip"; s.textContent=text; parent.appendChild(s);
+  }
+  function checkSVG(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg>';
+  }
+
+  // ---------- keyboard: space reveals, arrows judge ----------
+  document.addEventListener("keydown", function(e){
+    if(quizView.classList.contains("hide")) return;
+    var judging = !$("judgeBar").classList.contains("hide");
+    if((e.key===" "||e.key==="Enter") && !judging){ e.preventDefault(); $("revealBtn").click(); }
+    else if(judging){
+      if(e.key==="ArrowRight"||e.key.toLowerCase()==="y"){ e.preventDefault(); $("rightBtn").click(); }
+      else if(e.key==="ArrowLeft"||e.key.toLowerCase()==="n"){ e.preventDefault(); $("wrongBtn").click(); }
+    }
+  });
+
+  // ---------- init ----------
+  SAMPLE.forEach(function(c){ cards.push({q:c.q,a:c.a}); });
+  renderList();
+})();
+</script>
+</body>
+</html>
